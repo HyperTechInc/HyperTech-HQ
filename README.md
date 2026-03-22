@@ -5,3 +5,5 @@
 State: 🔒 Private 🔒
 
 ⚠️ Release not stable ⚠️
+
+Check out: https://github.com/HyperTechInc/HyperTech-HQ/blob/main/Sponsors.md
