@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HyperTech BNS | Imperial Dashboard</title>
+    <style>
+        :root {
+            --bg-color: #0a0a0a;
+            --card-bg: #161616;
+            --text-main: #e0e0e0;
+            --accent-green: #00ff66;
+            --accent-blue: #00ccff;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 2px solid var(--card-bg);
+            width: 100%;
+            padding-bottom: 10px;
+        }
+
+        .status-badge {
+            background: rgba(0, 255, 102, 0.1);
+            color: var(--accent-green);
+            padding: 5px 15px;
+            border-radius: 20px;
+            border: 1px solid var(--accent-green);
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            width: 100%;
+            max-width: 1000px;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            border-left: 4px solid var(--accent-blue);
+        }
+
+        .card h2 {
+            margin-top: 0;
+            font-size: 1.2em;
+            color: var(--accent-blue);
+        }
+
+        .stat {
+            display: flex;
+            justify-content: space-between;
+            margin: 10px 0;
+            font-size: 1.1em;
+        }
+
+        .zone-bar {
+            height: 10px;
+            width: 100%;
+            background: #333;
+            border-radius: 5px;
+            margin-top: 15px;
+            display: flex;
+            overflow: hidden;
+        }
+
+        .zone { flex: 1; }
+        .z-white { background: #ffffff; } /* -20°C */
+        .z-blue { background: #0000ff; }  /* -20°C Frost */
+        .z-lblue { background: #add8e6; } /* -15°C Cold */
+        .z-green { background: #00ff00; } /* Safe */
+        .z-red { background: #ff0000; }   /* Hot */
+        .z-purple { background: #800080; } /* Extreme */
+        .z-nuclear { background: #000000; animation: blink 0.5s infinite; } /* ŉ */
+
+        @keyframes blink {
+            50% { opacity: 0; }
+        }
+
+        .alerter {
+            background: #1a3a1a;
+            color: #00ff66;
+            padding: 10px;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: bold;
+            margin-top: 20px;
+            border: 1px solid #00ff66;
+        }
+
+        .footer {
+            margin-top: 50px;
+            font-size: 0.8em;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>👑 HyperTech BNS 👑</h1>
+        <span class="status-badge">TSFU: ONLINE</span>
+    </div>
+
+    <div class="grid">
+        <div class="card">
+            <h2>Device Architecture</h2>
+            <div class="stat"><span>Model:</span> <span>Redmi 15 4G</span></div>
+            <div class="stat"><span>OS:</span> <span>Android 16 / HyperOS 3</span></div>
+            <div class="stat"><span>Panel:</span> <span>LCD IPS 144Hz</span></div>
+            <div class="stat"><span>Switching:</span> <span>0.018ms</span></div>
+        </div>
+
+        <div class="card">
+            <h2>Stability Scale</h2>
+            <div class="stat"><span>Zone:</span> <span>Super Zone</span></div>
+            <div class="stat"><span>Status:</span> <span>🟩 Safe</span></div>
+            <div class="zone-bar">
+                <div class="zone z-white"></div>
+                <div class="zone z-blue"></div>
+                <div class="zone z-lblue"></div>
+                <div class="zone z-green"></div>
+                <div class="zone z-red"></div>
+                <div class="zone z-purple"></div>
+                <div class="zone z-nuclear"></div>
+            </div>
+            <p style="font-size: 0.8em; text-align: center; margin-top: 5px;">
+                ⬜ 🟦 🩵 🟩 🟨 🟧 🟥 🩶 🟪 ⬛ ŉ
+            </p>
+        </div>
+
+        <div class="card">
+            <h2>Uplink Details</h2>
+            <div class="stat"><span>Domain:</span> <span>hypertechbns.com</span></div>
+            <div class="stat"><span>Security:</span> <span>Cloudflare Proxied</span></div>
+            <div class="stat"><span>Hosting:</span> <span>GitHub Spire</span></div>
+        </div>
+    </div>
+
+    <div class="alerter">
+        🟢 [MODEL SWITCH]: CONNECTED TO STABLE NODE
+    </div>
+
+    <div class="footer">
+        Property of KingZarek1 | United Lego Empire | © 2026
+    </div>
+
+</body>
+</html>
