@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>HyperTech | ULE Supreme v16.7</title>
+    <title>HyperTech | ULE Supreme v16.8</title>
     <style>
         :root { 
             --accent: #0a84ff; --bg: #000000; --card: #1c1c1e; --text: #ffffff; 
@@ -23,14 +23,11 @@
         .tab-view { display: none; }
         .tab-view.active { display: block; animation: fadeIn 0.3s ease; }
 
-        /* IMPERIAL COMMUNICATION (VIBER STYLE) */
+        /* COMM UI */
         .comm-container { display: grid; grid-template-columns: 180px 1fr; gap: 15px; height: 500px; }
         .comm-sidebar { border-right: 1px solid var(--border); padding-right: 10px; overflow-y: auto; }
-        .comm-cat { font-size: 11px; color: #555; text-transform: uppercase; margin: 15px 0 5px; font-weight: 800; }
         .comm-item { padding: 10px; border-radius: 8px; margin-bottom: 5px; cursor: pointer; font-size: 13px; background: #111; }
-        .comm-item:hover { background: var(--accent); }
         .comm-item.active { border-left: 3px solid var(--accent); background: #222; }
-        #chat-window { display: flex; flex-direction: column; height: 100%; }
         #chat-feed { flex: 1; overflow-y: auto; background: rgba(0,0,0,0.3); border-radius: 12px; padding: 15px; margin-bottom: 10px; border: 1px solid var(--border); }
         
         /* CAMERA */
@@ -38,7 +35,7 @@
         video { width: 100%; height: 100%; object-fit: cover; }
         .btn-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px; }
 
-        /* BUTTONS & INPUTS */
+        /* BUTTONS */
         .btn-main { width: 100%; padding: 12px; background: var(--accent); border: none; border-radius: 10px; color: #fff; font-weight: 700; cursor: pointer; transition: 0.2s; }
         .btn-main:active { transform: scale(0.98); }
         input, textarea { width: 100%; padding: 12px; background: #2c2c2e; border: 1px solid #444; border-radius: 10px; color: #fff; margin: 8px 0; box-sizing: border-box; outline: none; }
@@ -52,15 +49,14 @@
         <input type="file" id="pfp-upload" style="display:none;" accept="image/*" onchange="loadPFP(event)">
         <img id="pfp-sidebar" src="https://via.placeholder.com/70" onclick="document.getElementById('pfp-upload').click()" style="width:70px; height:70px; border-radius:50%; border:3px solid var(--accent); cursor:pointer; object-fit: cover;">
         <div id="side-name" style="font-weight:900; margin-top:15px; font-size:18px;">EMPEROR MIK</div>
-        <div style="font-size:11px; color:var(--green); margin-bottom:20px;">● REDMI 15 OPTIMIZED</div>
+        <div style="font-size:11px; color:var(--green); margin-bottom:20px;">● SYSTEM ENCRYPTED</div>
         
         <nav>
             <div class="nav-item active" onclick="tab('comm', this)">📱 Imperial Comm</div>
             <div class="nav-item" onclick="tab('live', this)">📹 Imperial Live</div>
             <div class="nav-item" onclick="tab('mod', this)">⚖️ Moderation</div>
-            <div class="nav-item" onclick="tab('account', this)">👤 Account</div>
+            <div class="nav-item" onclick="tab('settings', this)">⚙️ Settings</div>
             <div class="nav-item" onclick="tab('autofix', this)">🛠️ AutoFix</div>
-            <div class="nav-item" onclick="tab('about', this)">ℹ️ About</div>
             <div class="nav-item" onclick="tab('support', this)">🆘 Support</div>
         </nav>
     </aside>
@@ -70,21 +66,14 @@
             <div class="card" style="height: 600px;">
                 <div class="comm-container">
                     <div class="comm-sidebar">
-                        <div class="comm-cat">Communities</div>
                         <div class="comm-item active" onclick="setChannel('Global Empire')">🌐 Global Empire</div>
                         <div class="comm-item" onclick="setChannel('MIK Council')">👑 Council HQ</div>
-                        <div class="comm-cat">Direct Messages</div>
-                        <div class="comm-item" onclick="setChannel('Husel AI')">🤖 Husel AI</div>
-                        <div class="comm-item" onclick="setChannel('BotZarek#01')">⚔️ BotZarek#01</div>
                     </div>
-                    <div id="chat-window">
+                    <div style="display:flex; flex-direction:column; height:100%;">
                         <h3 id="active-chat-title">Global Empire</h3>
                         <div id="chat-feed"></div>
-                        <div style="display:flex; gap:10px;">
-                            <input type="text" id="comm-msg" placeholder="Message...">
-                            <button onclick="sendComm()" style="width:80px; background:var(--accent); color:#fff; border:none; border-radius:10px;">Send</button>
-                        </div>
-                        <button class="btn-main" id="rec-btn" style="margin-top:10px; background:var(--green);" onclick="toggleVoice()">🎤 VOICE MESSAGE</button>
+                        <input type="text" id="comm-msg" placeholder="Broadcast message...">
+                        <button class="btn-main" onclick="sendComm()" style="margin-top:5px;">Send Broadcast</button>
                     </div>
                 </div>
             </div>
@@ -92,43 +81,29 @@
 
         <div id="view-live" class="tab-view">
             <div class="card">
-                <h2>Imperial Live (144Hz Feed)</h2>
+                <h2>Imperial Live Feed</h2>
                 <div id="cam-box"><video id="v-feed" autoplay playsinline muted></video></div>
                 <div class="btn-grid">
                     <button class="btn-main" onclick="startCamera()">START LIVE</button>
                     <button class="btn-main" style="background:var(--danger);" onclick="stopCamera()">END LIVE</button>
-                    <button class="btn-main" style="background:#444;" onclick="flipCamera()">ROTATE</button>
-                    <button class="btn-main" style="background:#444;" id="flash-btn" onclick="toggleFlash()">FLASH OFF</button>
-                </div>
-                <button class="btn-main" style="margin-top:10px; background:#222;" onclick="toggleMic()">MIC: <span id="mic-label">ON</span></button>
-            </div>
-        </div>
-
-        <div id="view-mod" class="tab-view">
-            <div class="card">
-                <h2>Moderation Vault</h2>
-                <div id="mod-list">
-                    <div id="user-1" style="padding:15px; border-bottom:1px solid var(--border); display:flex; justify-content:space-between; align-items:center;">
-                        <div><strong>Guest_442</strong> <small style="color:#888;">( Bosnian Node )</small></div>
-                        <div>
-                            <button class="btn-main" style="width:60px; padding:5px; font-size:10px; background:blue;" onclick="modNotify('Warned Guest_442')">Warn</button>
-                            <button class="btn-main" style="width:60px; padding:5px; font-size:10px; background:orange;" onclick="modNotify('Timed Out Guest_442')">Time</button>
-                            <button class="btn-main" style="width:60px; padding:5px; font-size:10px; background:red;" onclick="kickUser('user-1')">BAN</button>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
 
-        <div id="view-account" class="tab-view">
+        <div id="view-settings" class="tab-view">
             <div class="card">
-                <h2>Imperial Account</h2>
-                <div style="text-align:center; margin-bottom:20px;">
-                    <img id="acc-pfp-preview" src="https://via.placeholder.com/70" style="width:100px; height:100px; border-radius:50%; border:3px solid var(--accent);">
+                <h2>Imperial Settings</h2>
+                <div style="margin-bottom:20px; border-bottom:1px solid #333; padding-bottom:15px;">
+                    <label>Identity Management</label>
+                    <input type="text" id="acc-name-in" placeholder="Update Imperial Name...">
+                    <button class="btn-main" onclick="updateAccount()">Apply Identity Change</button>
                 </div>
-                <label>Change Display Name</label>
-                <input type="text" id="acc-name-in" placeholder="New Imperial Name...">
-                <button class="btn-main" onclick="updateAccount()">Update Identity</button>
+                
+                <div style="margin-top:20px;">
+                    <label style="color:var(--danger);">System Security</label>
+                    <p style="font-size:12px; color:#888;">Clear all local cache and end current session.</p>
+                    <button class="btn-main" style="background:var(--danger);" onclick="forceLogout()">⚠️ FORCE LOGOUT & WIPE</button>
+                </div>
             </div>
         </div>
 
@@ -136,35 +111,14 @@
             <div class="card">
                 <h2>AutoFix Engine</h2>
                 <button class="btn-main" onclick="executeFix()">EXECUTE GLOBAL REPAIR</button>
-                <div id="fix-log" style="font-family:monospace; font-size:12px; color:var(--green); margin-top:15px; line-height:1.5;"></div>
-            </div>
-        </div>
-
-        <div id="view-about" class="tab-view">
-            <div class="card">
-                <h2>About the Spire</h2>
-                <p><strong>Version:</strong> ULE Supreme v16.7</p>
-                <p><strong>Hardware:</strong> Redmi 15 (25062RN2DY)</p>
-                <p><strong>Security:</strong> HyperConnect Owner Grade</p>
-                <p>Optimized for LCD IPS 144Hz. OLED inferiority blocked.</p>
-            </div>
-        </div>
-        <div id="view-support" class="tab-view">
-            <div class="card">
-                <h2>Support Portal</h2>
-                <p>Direct uplink to LCED Tech Team.</p>
-                <textarea id="bug-report" placeholder="Describe the glitch or 'Clanker' activity..."></textarea>
-                <button class="btn-main" onclick="alert('Ticket Sent to Council.')">Submit Ticket</button>
+                <div id="fix-log" style="font-family:monospace; color:var(--green); margin-top:15px;"></div>
             </div>
         </div>
     </main>
 
     <script>
-        const API_KEY = "AIzaSyCyG5yapEekcUk3hNRlB_qQX2N7Z2r4PhI";
-        let stream = null, faceMode = "user", mic = true, flash = false;
-        let mediaRec, chunks = [];
+        let stream = null;
 
-        // --- NAVIGATION ---
         function tab(id, el) {
             document.querySelectorAll('.tab-view').forEach(v => v.classList.remove('active'));
             document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
@@ -172,73 +126,45 @@
             el.classList.add('active');
         }
 
-        // --- COMMUNICATION ---
-        function setChannel(name) {
-            document.getElementById('active-chat-title').innerText = name;
-            document.getElementById('chat-feed').innerHTML += `<div style="color:#555; font-size:12px; margin:10px 0;">-- Switched to ${name} --</div>`;
-        }
         function sendComm() {
             const input = document.getElementById('comm-msg');
             if(!input.value) return;
-            document.getElementById('chat-feed').innerHTML += `<div style="margin-bottom:10px; align-self:flex-end; background:#222; padding:10px; border-radius:10px;"><strong>You:</strong> ${input.value}</div>`;
+            document.getElementById('chat-feed').innerHTML += `<div style="margin-bottom:10px;"><strong>You:</strong> ${input.value}</div>`;
             input.value = "";
             document.getElementById('chat-feed').scrollTop = 9999;
         }
-        async function toggleVoice() {
-            const btn = document.getElementById('rec-btn');
-            if(!mediaRec || mediaRec.state === "inactive") {
-                const s = await navigator.mediaDevices.getUserMedia({ audio: true });
-                mediaRec = new MediaRecorder(s);
-                mediaRec.ondataavailable = e => chunks.push(e.data);
-                mediaRec.onstop = () => {
-                    const blob = new Blob(chunks, { type: 'audio/ogg' });
-                    const url = URL.createObjectURL(blob);
-                    document.getElementById('chat-feed').innerHTML += `<div><strong>You:</strong> <audio src="${url}" controls style="height:30px;"></audio></div>`;
-                    chunks = [];
-                };
-                mediaRec.start();
-                btn.innerText = "🛑 SENDING BROADCAST..."; btn.style.background = "red";
-            } else {
-                mediaRec.stop(); btn.innerText = "🎤 VOICE MESSAGE"; btn.style.background = "var(--green)";
+
+        async function startCamera() {
+            stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+            document.getElementById('v-feed').srcObject = stream;
+        }
+
+        function stopCamera() { if(stream) stream.getTracks().forEach(t => t.stop()); }
+
+        function updateAccount() {
+            const name = document.getElementById('acc-name-in').value;
+            if(name) { 
+                document.getElementById('side-name').innerText = name; 
+                alert("Identity Updated, My King."); 
             }
         }
 
-        // --- CAMERA ---
-        async function startCamera() {
-            if(stream) stopCamera();
-            stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: faceMode }, audio: mic });
-            document.getElementById('v-feed').srcObject = stream;
+        function forceLogout() {
+            if(confirm("Confirm Sector Wipe? All local Imperial data will be purged.")) {
+                localStorage.clear();
+                alert("Cache Purged. Logging out...");
+                location.reload(); 
+            }
         }
-        function stopCamera() { if(stream) stream.getTracks().forEach(t => t.stop()); }
-        function flipCamera() { faceMode = (faceMode === "user") ? "environment" : "user"; startCamera(); }
-        async function toggleFlash() {
-            const track = stream.getVideoTracks()[0];
-            flash = !flash;
-            await track.applyConstraints({ advanced: [{ torch: flash }] });
-            document.getElementById('flash-btn').innerText = flash ? "FLASH ON" : "FLASH OFF";
-        }
-        function toggleMic() { mic = !mic; if(stream) stream.getAudioTracks().forEach(t => t.enabled = mic); document.getElementById('mic-label').innerText = mic ? "ON" : "OFF"; }
 
-        // --- ACCOUNT & MOD ---
-        function updateAccount() {
-            const name = document.getElementById('acc-name-in').value;
-            if(name) { document.getElementById('side-name').innerText = name; alert("Imperial Identity Updated."); }
-        }
-        function kickUser(id) { document.getElementById(id).style.opacity = "0.2"; alert("USER BANNED FROM SPIRE."); }
-        function modNotify(msg) { alert("Moderation Action: " + msg); }
         function loadPFP(e) {
             const r = new FileReader();
-            r.onload = () => { 
-                document.getElementById('pfp-sidebar').src = r.result; 
-                document.getElementById('acc-pfp-preview').src = r.result;
-            };
+            r.onload = () => document.getElementById('pfp-sidebar').src = r.result;
             r.readAsDataURL(e.target.files[0]);
         }
 
-        // --- AUTOFIX ---
         function executeFix() {
-            const log = document.getElementById('fix-log');
-            log.innerHTML = "Initializing Spire Repair...<br>> Re-mapping Imperial Comm...<br>> Verifying 144Hz LCD Buffer...<br>> Resetting Admin Permissions...<br>> 🟩 SYSTEM OPTIMAL.";
+            document.getElementById('fix-log').innerHTML = "> Resyncing 144Hz...<br>> 🟩 SYSTEM OPTIMAL.";
         }
     </script>
 </body>
