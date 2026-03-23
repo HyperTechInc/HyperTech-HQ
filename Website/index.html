@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>MIK | DECADE DECK v25.0</title>
+    <title>MIK | INTERACTIVE EMPIRE v26.0</title>
     <script type="importmap">
       { "imports": { "@google/generative-ai": "https://esm.run/@google/generative-ai" } }
     </script>
@@ -12,120 +12,135 @@
             --accent: #0a84ff; --bg: #000; --card: #0a0a0b; --text: #d1d1d6; 
             --green: #30d158; --danger: #ff453a; --border: #1c1c1e; --gold: #ffd60a; --purple: #bf5af2;
         }
-        * { box-sizing: border-box; font-family: 'Courier New', Courier, monospace; scroll-behavior: smooth; }
+        * { box-sizing: border-box; font-family: 'Courier New', Courier, monospace; }
         body { background: var(--bg); color: var(--text); margin: 0; display: flex; height: 100vh; overflow: hidden; }
-        
-        /* 10-MENU SIDEBAR */
-        #sidebar { width: 280px; background: #000; border-right: 2px solid var(--accent); display: flex; flex-direction: column; padding: 10px; flex-shrink: 0; overflow-y: auto; }
-        .nav-item { padding: 10px; margin: 2px 0; border: 1px solid #111; border-radius: 4px; color: #555; cursor: pointer; font-size: 9px; text-transform: uppercase; font-weight: 900; transition: 0.1s; }
-        .nav-item:hover { border-color: var(--accent); color: #fff; background: #0a84ff11; }
-        .nav-item.active { background: #0a84ff22; border-color: var(--accent); color: #fff; box-shadow: 0 0 10px #0a84ff33; }
 
-        main { flex: 1; overflow-y: auto; padding: 20px; background: radial-gradient(circle at center, #0a0a10 0%, #000 100%); }
+        /* TACTICAL LOGIN */
+        #login-overlay { position: fixed; inset: 0; background: #000; z-index: 9999; display: flex; align-items: center; justify-content: center; flex-direction: column; }
+        .login-box { border: 2px solid var(--accent); padding: 30px; background: #050505; text-align: center; box-shadow: 0 0 30px #0a84ff55; }
+        .login-input { background: #000; border: 1px solid #333; color: var(--green); padding: 12px; margin: 10px 0; width: 260px; text-align: center; font-size: 16px; }
+
+        /* SIDEBAR */
+        #sidebar { width: 260px; background: #000; border-right: 2px solid var(--accent); display: flex; flex-direction: column; padding: 10px; flex-shrink: 0; }
+        .nav-item { padding: 10px; margin: 2px 0; border: 1px solid #111; border-radius: 4px; color: #444; cursor: pointer; font-size: 9px; text-transform: uppercase; font-weight: 900; transition: 0.1s; }
+        .nav-item:hover { border-color: var(--accent); color: #fff; background: #0a84ff11; }
+        .nav-item.active { background: #0a84ff22; border-color: var(--accent); color: #fff; }
+
+        /* MAIN CONTENT */
+        main { flex: 1; overflow-y: auto; padding: 20px; display: none; }
         .tab-view { display: none; }
         .tab-view.active { display: block; animation: powerOn 0.3s ease-out; }
         
         .card { background: var(--card); border: 1px solid var(--border); padding: 15px; margin-bottom: 15px; border-left: 4px solid var(--accent); }
-        .card-title { font-size: 11px; color: var(--accent); margin-bottom: 10px; font-weight: 900; letter-spacing: 1px; display: flex; justify-content: space-between; }
+        .card-title { font-size: 11px; color: var(--accent); margin-bottom: 12px; font-weight: 900; letter-spacing: 1px; }
 
-        .term { background: #000; color: var(--green); padding: 10px; font-size: 10px; height: 150px; overflow-y: auto; border: 1px solid #222; }
-        .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 10px; margin-bottom: 15px; }
-        .stat-box { background: #050505; border: 1px solid #222; padding: 10px; text-align: center; }
+        /* BUTTONS */
+        .cmd-btn { background: #111; border: 1px solid #333; color: #fff; padding: 10px; cursor: pointer; font-size: 9px; font-weight: bold; text-transform: uppercase; margin: 2px; flex: 1; }
+        .cmd-btn:hover { background: var(--accent); border-color: #fff; color: #000; }
+        .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 5px; }
 
-        @keyframes powerOn { from { opacity: 0; transform: scale(0.99); } to { opacity: 1; transform: scale(1); } }
+        .term { background: #000; color: var(--green); padding: 10px; font-size: 10px; height: 120px; overflow-y: auto; border: 1px solid #222; margin-top: 10px; }
+        @keyframes powerOn { from { opacity: 0; filter: blur(5px); } to { opacity: 1; filter: blur(0); } }
     </style>
 </head>
 <body>
 
-    <aside id="sidebar">
-        <div style="text-align:center; padding:15px 0; border-bottom:1px solid #222; margin-bottom:10px;">
-            <div style="font-size:14px; font-weight:900; color:white; letter-spacing:2px;">KINGZAREK1</div>
-            <div style="font-size:8px; color:var(--gold);">BNS SECTOR: BANJA LUKA</div>
+    <div id="login-overlay">
+        <div class="login-box">
+            <h1 style="color:var(--accent); font-size:18px;">MIK_CLOUD_ACCESS</h1>
+            <p style="font-size:9px; color:#666;">AUTHORIZATION: bosanskasirnica001</p>
+            <input type="password" id="pass" class="login-input" placeholder="ACCESS_CODE">
+            <br>
+            <button class="cmd-btn" style="width:100%; border-color:var(--green); color:var(--green);" onclick="login()">AUTHORIZE</button>
         </div>
-        <nav>
-            <div class="nav-item active" onclick="tab('dash', this)">01. 🛰️ DASHBOARD</div>
+    </div>
+
+    <aside id="sidebar">
+        <div style="text-align:center; padding-bottom:10px; border-bottom:1px solid #222; margin-bottom:10px;">
+            <div style="font-size:14px; font-weight:900; color:white;">KINGZAREK1</div>
+            <div style="font-size:8px; color:var(--green);">● SYSTEM_AFK_MINING</div>
+        </div>
+        <nav id="master-nav">
+            <div class="nav-item active" onclick="tab('dash', this)">01. 📡 DASHBOARD</div>
             <div class="nav-item" onclick="tab('spire', this)">02. 🧠 SPIRE_AI</div>
-            <div class="nav-item" onclick="tab('call', this)">03. 📞 COMM_HUB</div>
+            <div class="nav-item" onclick="tab('comm', this)">03. 📞 COMM_HUB</div>
             <div class="nav-item" onclick="tab('labs', this)">04. 🧪 GRAPHENE_LABS</div>
-            <div class="nav-item" onclick="tab('smart', this)">05. 🏠 SMART_MINIONS</div>
-            <div class="nav-item" onclick="tab('war', this)">06. ⚔️ STICK_WAR_INTEL</div>
+            <div class="nav-item" onclick="tab('home', this)">05. 🏠 SMART_MINIONS</div>
+            <div class="nav-item" onclick="tab('stick', this)">06. ⚔️ STICK_WAR</div>
             <div class="nav-item" onclick="tab('mod', this)">07. ⚖️ MOD_ARSENAL</div>
-            <div class="nav-item" onclick="tab('afk', this)">08. ⛏️ KEY_HARVESTER</div>
-            <div class="nav-item" onclick="tab('bns', this)">09. 📍 BNS_RADAR</div>
+            <div class="nav-item" onclick="tab('mine', this)">08. ⛏️ KEY_HARVESTER</div>
+            <div class="nav-item" onclick="tab('radar', this)">09. 📍 BNS_RADAR</div>
             <div class="nav-item" onclick="tab('nuke', this)">10. ☢️ NUCLEAR_ŉ</div>
         </nav>
     </aside>
 
-    <main>
+    <main id="main-deck">
         <div id="view-dash" class="tab-view active">
-            <div class="stat-grid">
-                <div class="stat-box"><span style="color:var(--green)">144Hz</span><br><small>LCD_SYNC</small></div>
-                <div class="stat-box"><span style="color:var(--gold)">951</span><br><small>ELO (2v2)</small></div>
-                <div class="stat-box"><span style="color:var(--accent)">1x1x1x1</span><br><small>BOSS_MODE</small></div>
-            </div>
             <div class="card">
-                <div class="card-title">SYSTEM_READOUT</div>
-                <div style="font-size:10px;">
-                    > DEVICE: REDMI 15 4G (25062RN2DY)<br>
-                    > OS: HYPEROS 3.0 / ANDROID 16<br>
-                    > MIK STATUS: IMMORTAL
+                <div class="card-title">QUICK_ACTIONS</div>
+                <div class="grid-3">
+                    <button class="cmd-btn" onclick="sys('SYNCING_144HZ')">144Hz SYNC</button>
+                    <button class="cmd-btn" onclick="sys('CLEANING_CACHE')">CLEAN CACHE</button>
+                    <button class="cmd-btn" onclick="sys('TSFU_REBOOT')">TSFU REBOOT</button>
                 </div>
             </div>
+            <div class="card"><div class="card-title">STATUS_LOG</div><div class="term" id="dash-term">> Handshake complete...</div></div>
         </div>
 
         <div id="view-spire" class="tab-view">
             <div class="card">
-                <div class="card-title">SPIRE_AI_UPLINK</div>
-                <div class="term" id="ai-win">> Awaiting Decree, My King...</div>
-                <input type="text" id="ai-in" placeholder="Command..." style="width:100%; background:#000; border:1px solid #333; color:white; padding:10px; margin-top:5px;">
-                <button onclick="talkToAI()" style="width:100%; padding:10px; background:var(--accent); border:none; margin-top:5px; font-weight:bold;">DECREE</button>
+                <div class="card-title">CLOUD_SPIRE_BRAIN</div>
+                <div class="term" id="ai-win" style="height:180px;">> SPIRE: Online. Awaiting Decree.</div>
+                <div style="display:flex; margin-top:10px;">
+                    <input type="text" id="ai-in" placeholder="Command..." style="flex:1; background:#000; border:1px solid #333; color:white; padding:10px;">
+                    <button class="cmd-btn" onclick="talkToAI()">DECREE</button>
+                </div>
+                <div class="grid-3" style="margin-top:10px;">
+                    <button class="cmd-btn" onclick="quickAI('Status check')">STATUS</button>
+                    <button class="cmd-btn" onclick="quickAI('Tell me a joke')">JOKE</button>
+                    <button class="cmd-btn" onclick="quickAI('Strategy update')">STRAT</button>
+                </div>
             </div>
         </div>
 
         <div id="view-labs" class="tab-view">
             <div class="card" style="border-left-color: var(--gold);">
-                <div class="card-title">🧪 REFINING: Si-C-Graphene-Saltion</div>
-                <div class="term" id="lab-term">> STABILITY: 100%<br>> TEMPERATURE: 25°C 🟩</div>
-                <button onclick="refine()" style="width:100%; padding:10px; background:#111; border:1px solid var(--gold); color:var(--gold); margin-top:10px;">REFINE_CORE</button>
-            </div>
-        </div>
-
-        <div id="view-smart" class="tab-view">
-            <div class="card">
-                <div class="card-title">XIAOMI_SMART_ECOSYSTEM</div>
-                <div style="font-size:10px;">
-                    🏠 GATEWAY: [STRICT_MULTIWORKER]<br>
-                    📱 HUB: [MANAGER_BRAVE]<br>
-                    ⚡ MINIONS: 1x1x1x1 SQUAD ONLINE
+                <div class="card-title">🧪 REDMI_15_CHEMICAL_CONTROL</div>
+                <div class="grid-3">
+                    <button class="cmd-btn" onclick="lab('INJECTING_SALTION')">INJECT SALT</button>
+                    <button class="cmd-btn" onclick="lab('GRAPHENE_REFINING')">REFINE</button>
+                    <button class="cmd-btn" onclick="lab('COOLING_CORE')">COOL CORE</button>
                 </div>
+                <div class="term" id="lab-log">> LAB_IDLE...</div>
             </div>
         </div>
 
-        <div id="view-war" class="tab-view">
+        <div id="view-mod" class="tab-view">
             <div class="card" style="border-left-color: var(--danger);">
-                <div class="card-title">STICK_WAR_SAGA_INTEL</div>
-                <div style="font-size:10px;">RANK: KING<br>TARGET_ELO: 1500+<br>ENEMY: SHED (ISP_ASTEROID)</div>
-            </div>
-        </div>
-
-        <div id="view-afk" class="tab-view">
-            <div class="card" style="border-left-color: var(--purple);">
-                <div class="card-title">AFK_KEY_MINE</div>
-                <div class="stat-box"><span id="afk-keys" style="font-size:24px; color:var(--purple);">0</span><br>MIK_KEYS_MINED</div>
-                <div class="term" style="height:100px; margin-top:10px;" id="afk-log">> Mining started...</div>
+                <div class="card-title">MODERATION_COMMANDS</div>
+                <input type="text" id="mod-target" placeholder="TARGET_NAME" class="login-input" style="width:100%; text-align:left;">
+                <div class="grid-3">
+                    <button class="cmd-btn" style="color:red;" onclick="mod('BAN')">BAN</button>
+                    <button class="cmd-btn" style="color:var(--gold);" onclick="mod('WARN')">WARN</button>
+                    <button class="cmd-btn" onclick="mod('PURGE')">PURGE</button>
+                </div>
+                <div class="term" id="mod-log"></div>
             </div>
         </div>
 
         <div id="view-nuke" class="tab-view">
-            <div class="card" style="border-left-color: var(--danger);">
-                <div class="card-title">ŉ NUCLEAR_WIPE</div>
-                <button onclick="nuke()" style="width:100%; padding:20px; background:#300; border:1px solid red; color:red; font-weight:bold;">ŉ CATASTROPHIC_WIPE</button>
+            <div class="card" style="border-left-color: red;">
+                <div class="card-title">ŉ NUCLEAR_STRIKE</div>
+                <button class="cmd-btn" style="background:red; color:black; height:80px; font-size:18px;" onclick="nuke()">INITIALIZE ŉ WIPE</button>
+                <button class="cmd-btn" style="margin-top:10px; width:100%;" onclick="sys('VPN_RESET')">VPN_AUTO_CONNECT</button>
             </div>
         </div>
 
-        <div id="view-call" class="tab-view"><div class="card"><div class="card-title">COMM_HUB</div><p>AUDIO/VIDEO SYNCING...</p></div></div>
-        <div id="view-mod" class="tab-view"><div class="card"><div class="card-title">MOD_ARSENAL</div><p>Banning Clankers...</p></div></div>
-        <div id="view-bns" class="tab-view"><div class="card"><div class="card-title">BNS_RADAR</div><p>Scanning Banja Luka...</p></div></div>
+        <div id="view-comm" class="tab-view"><div class="card"><div class="card-title">COMM_HUB</div><button class="cmd-btn" onclick="alert('Calling MIK Council...')">📞 START CALL</button></div></div>
+        <div id="view-home" class="tab-view"><div class="card"><div class="card-title">SMART_MINIONS</div><button class="cmd-btn" onclick="sys('GATEWAY_SYNC')">SYNC GATEWAY</button></div></div>
+        <div id="view-stick" class="tab-view"><div class="card"><div class="card-title">STICK_WAR_STATS</div><button class="cmd-btn" onclick="sys('FETCHING_ELO')">FETCH ELO</button></div></div>
+        <div id="view-mine" class="tab-view"><div class="card"><div class="card-title">KEY_HARVESTER</div><button class="cmd-btn" onclick="alert('Mining accelerated!')">BOOST MINE</button></div></div>
+        <div id="view-radar" class="tab-view"><div class="card"><div class="card-title">BNS_RADAR</div><button class="cmd-btn" onclick="sys('SCANNING_BNS')">SCAN BANJA LUKA</button></div></div>
 
     </main>
 
@@ -135,6 +150,16 @@
         const genAI = new GoogleGenerativeAI(API_KEY);
         const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
+        // LOGIN SYSTEM
+        window.login = () => {
+            const p = document.getElementById('pass').value;
+            if(p === "25062RN2DY" || p === "pero7373") {
+                document.getElementById('login-overlay').style.display = 'none';
+                document.getElementById('main-deck').style.display = 'block';
+            } else { alert("ACCESS DENIED."); }
+        };
+
+        // TAB SYSTEM
         window.tab = (id, el) => {
             document.querySelectorAll('.tab-view').forEach(v => v.classList.remove('active'));
             document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
@@ -142,31 +167,42 @@
             el.classList.add('active');
         };
 
+        // INTERACTIVE FUNCTIONS
+        window.sys = (msg) => {
+            const t = document.getElementById('dash-term');
+            t.innerHTML += `<br>> EXECUING: ${msg}... [DONE]`;
+            t.scrollTop = t.scrollHeight;
+        };
+
+        window.lab = (msg) => {
+            const t = document.getElementById('lab-log');
+            t.innerHTML += `<br>> LAB_CMD: ${msg}...`;
+            t.scrollTop = t.scrollHeight;
+        };
+
+        window.mod = (act) => {
+            const target = document.getElementById('mod-target').value || "CLANKER";
+            const t = document.getElementById('mod-log');
+            t.innerHTML += `<br>> ${act}_EXECUTED ON [${target}]`;
+            t.scrollTop = t.scrollHeight;
+        };
+
         window.talkToAI = async () => {
             const i = document.getElementById('ai-in');
             const w = document.getElementById('ai-win');
-            const val = i.value; i.value = "Uplinking...";
-            w.innerHTML += `<br><span style="color:var(--gold);">KING:</span> ${val}`;
+            if(!i.value) return;
+            const text = i.value; i.value = "Uplinking...";
+            w.innerHTML += `<br><span style="color:var(--gold);">KING:</span> ${text}`;
             try {
-                const res = await model.generateContent(`You are the Spire AI for KingZarek1. Be witty and loyal. King says: ${val}`);
+                const res = await model.generateContent(`You are the Spire AI for KingZarek1. Be witty, talkative like Character AI, and loyal to the MIK Empire in Banja Luka. King says: ${text}`);
                 w.innerHTML += `<br><span style="color:var(--accent);">SPIRE:</span> ${res.response.text()}`;
-            } catch(e) { w.innerHTML += `<br>> CLOUD_ERROR: Farming more keys...`; }
+            } catch(e) { w.innerHTML += `<br>> CLOUD_QUOTA_HIT. Farming more keys...`; }
             i.value = ""; w.scrollTop = w.scrollHeight;
         };
 
-        let keys = 0;
-        setInterval(() => {
-            keys++;
-            if(document.getElementById('afk-keys')) document.getElementById('afk-keys').innerText = keys;
-            if(keys % 5 === 0 && document.getElementById('afk-log')) {
-                document.getElementById('afk-log').innerHTML += `<br>> Mined: SECURE_TOKEN_${Math.random().toString(36).substr(2,4).toUpperCase()}`;
-            }
-        }, 3000);
-
-        window.refine = () => {
-            const l = document.getElementById('lab-term');
-            l.innerHTML += "<br>> REFINING... SALTION CORE STABILIZED.";
-            l.scrollTop = l.scrollHeight;
+        window.quickAI = (msg) => {
+            document.getElementById('ai-in').value = msg;
+            window.talkToAI();
         };
 
         window.nuke = () => { if(confirm("ŉ NUCLEAR WIPE?")) location.reload(); };
