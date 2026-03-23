@@ -2,183 +2,207 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HyperTech | ULE Supreme v16.2</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>HyperTech | ULE Supreme v16.4</title>
     <style>
-        :root {
-            --ht-white: #ffffff; --ht-silver: #f2f2f7; --ht-accent: #007aff; 
-            --ht-text: #1c1c1e; --ht-border: #d1d1d6; --tsfu-green: #34c759;
-            --danger-red: #ff3b30; --card-bg: #ffffff;
-        }
-        [data-theme="dark"] {
-            --ht-white: #1c1c1e; --ht-silver: #000000; --ht-accent: #0a84ff;
-            --ht-text: #ffffff; --ht-border: #38383a; --card-bg: #1c1c1e;
-        }
-        body { background-color: var(--ht-silver); color: var(--ht-text); font-family: -apple-system, sans-serif; margin: 0; display: flex; height: 100vh; overflow: hidden; }
-        #access-shield { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--ht-white); z-index: 10000; display: flex; align-items: center; justify-content: center; }
-        .login-card { width: 340px; background: var(--card-bg); padding: 30px; border-radius: 24px; text-align: center; border: 1px solid var(--ht-border); }
-        input, textarea { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid var(--ht-border); border-radius: 10px; background: var(--card-bg); color: var(--ht-text); outline: none; box-sizing: border-box; }
-        .btn-primary { width: 100%; background: var(--ht-accent); color: #fff; border: none; padding: 12px; border-radius: 10px; font-weight: 600; cursor: pointer; margin: 5px 0; }
+        :root { --ht-accent: #0a84ff; --ht-bg: #000000; --ht-card: #1c1c1e; --ht-text: #ffffff; --tsfu-green: #34c759; --danger: #ff3b30; }
+        body { background: var(--ht-bg); color: var(--ht-text); font-family: -apple-system, sans-serif; margin: 0; display: flex; height: 100vh; overflow: hidden; }
         
-        #sidebar { width: 240px; background: var(--ht-white); border-right: 1px solid var(--ht-border); display: flex; flex-direction: column; padding: 15px; overflow-y: auto; }
-        .nav-item { padding: 10px 15px; margin: 4px 0; border-radius: 8px; color: #8e8e93; cursor: pointer; font-size: 14px; font-weight: 600; transition: 0.2s; }
-        .nav-item:hover { background: rgba(0,0,0,0.05); }
+        /* SIDEBAR NAVIGATION */
+        #sidebar { width: 220px; background: #111; border-right: 1px solid #333; display: flex; flex-direction: column; padding: 20px; transition: 0.3s; }
+        .nav-item { padding: 12px; margin: 5px 0; border-radius: 10px; color: #888; cursor: pointer; font-weight: 600; font-size: 14px; display: flex; align-items: center; }
+        .nav-item:hover { background: #222; color: #fff; }
         .nav-item.active { background: var(--ht-accent); color: #fff; }
         
-        main { flex: 1; overflow-y: auto; padding: 25px; background: var(--ht-silver); }
-        .card { background: var(--card-bg); padding: 20px; border-radius: 18px; border: 1px solid var(--ht-border); margin-bottom: 20px; }
-        .tab-view { display: none; } .tab-view.active { display: block; }
+        /* MAIN CONTENT */
+        main { flex: 1; overflow-y: auto; padding: 20px; position: relative; }
+        .card { background: var(--ht-card); border-radius: 20px; padding: 20px; border: 1px solid #333; margin-bottom: 20px; }
+        .tab-view { display: none; opacity: 0; transition: 0.3s; }
+        .tab-view.active { display: block; opacity: 1; }
 
-        /* IMPERIAL COMMUNICATOR UI */
-        .comm-grid { display: grid; grid-template-columns: 200px 1fr; gap: 15px; height: 450px; }
-        .comm-list { border-right: 1px solid var(--ht-border); padding-right: 10px; overflow-y: auto; }
-        .comm-item { padding: 10px; border-radius: 10px; margin-bottom: 5px; cursor: pointer; font-size: 13px; background: rgba(0,0,0,0.03); }
-        .comm-item:hover { background: var(--ht-accent); color: white; }
-        #chat-window { display: flex; flex-direction: column; height: 100%; }
-        #chat-feed { flex: 1; overflow-y: auto; background: rgba(0,0,0,0.05); border-radius: 12px; padding: 15px; margin-bottom: 10px; }
-        .v-msg { background: var(--tsfu-green); color: white; padding: 8px; border-radius: 10px; margin-bottom: 10px; align-self: flex-start; }
+        /* CAMERA BOX */
+        #cam-box { width: 100%; border-radius: 15px; background: #000; aspect-ratio: 16/9; overflow: hidden; border: 2px solid #333; }
+        video { width: 100%; height: 100%; object-fit: cover; }
+        .btn-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px; }
+        
+        /* INPUTS */
+        input, textarea { width: 100%; padding: 12px; background: #2c2c2e; border: 1px solid #444; border-radius: 10px; color: #fff; margin: 8px 0; box-sizing: border-box; font-size: 14px; }
+        .btn-main { width: 100%; padding: 12px; background: var(--ht-accent); border: none; border-radius: 10px; color: #fff; font-weight: 700; cursor: pointer; }
+        
+        /* PFP */
+        #pfp-frame { width: 70px; height: 70px; border-radius: 50%; border: 3px solid var(--ht-accent); cursor: pointer; object-fit: cover; }
     </style>
 </head>
-<body data-theme="dark">
-
-    <div id="access-shield">
-        <div class="login-card">
-            <h1>HYPERTECH ULE</h1>
-            <p style="font-size: 12px; color: #888;">v16.2 [EMPIRE OVERLORD]</p>
-            <input type="email" id="auth-email" placeholder="Imperial Email">
-            <input type="password" id="auth-pass" placeholder="Master Key">
-            <button class="btn-primary" onclick="verifyImperial()">Login</button>
-        </div>
-    </div>
+<body>
 
     <aside id="sidebar">
-        <img id="pfp-sidebar" src="https://via.placeholder.com/60" style="width:65px; height:65px; border-radius:50%; border:3px solid var(--ht-accent); cursor:pointer;" onclick="document.getElementById('pfp-upload').click()">
-        <input type="file" id="pfp-upload" style="display:none;" accept="image/*" onchange="handlePFP(event)">
-        <div id="side-name" style="font-weight:900; font-size:18px; margin-top:10px;">Emperor</div>
-        <hr style="width:100%; border:0; border-top:1px solid var(--ht-border); margin:15px 0;">
+        <input type="file" id="pfp-upload" style="display:none;" accept="image/*" onchange="loadPFP(event)">
+        <img id="pfp-sidebar" src="https://via.placeholder.com/70" id="pfp-frame" onclick="document.getElementById('pfp-upload').click()" style="width:70px; height:70px; border-radius:50%; border:2px solid var(--ht-accent); cursor:pointer;">
+        <div style="font-weight:900; margin-top:15px; font-size:18px;">EMPEROR MIK</div>
+        <div style="font-size:11px; color:var(--tsfu-green); margin-bottom:20px;">● SYSTEM ONLINE</div>
         <nav>
-            <div id="nav-comm" class="nav-item active" onclick="showTab('comm')">📱 Imperial Comm</div>
-            <div id="nav-live" class="nav-item" onclick="showTab('live')">📹 Imperial Live</div>
-            <div id="nav-mod" class="nav-item" onclick="showTab('mod')">⚖️ Moderation</div>
-            <div id="nav-autofix" class="nav-item" onclick="showTab('autofix')">🛠️ AutoFix</div>
-            <div id="nav-about" class="nav-item" onclick="showTab('about')">ℹ️ About Spire</div>
-            <div id="nav-support" class="nav-item" onclick="showTab('support')">🆘 Support</div>
+            <div class="nav-item active" onclick="tab('comm')">📱 Imperial Comm</div>
+            <div class="nav-item" onclick="tab('live')">📹 Imperial Live</div>
+            <div class="nav-item" onclick="tab('mod')">⚖️ Moderation</div>
+            <div class="nav-item" onclick="tab('autofix')">🛠️ AutoFix</div>
+            <div class="nav-item" onclick="tab('about')">ℹ️ About</div>
+            <div class="nav-item" onclick="tab('support')">🆘 Support</div> </a>Gemini Sucker!<a> </div>
         </nav>
     </aside>
 
     <main>
         <div id="view-comm" class="tab-view active">
-            <div class="card" style="height: 550px;">
+            <div class="card">
                 <h2>Imperial Communication</h2>
-                <div class="comm-grid">
-                    <div class="comm-list">
-                        <div class="comm-item" onclick="loadChat('Global Community')">🌐 Global Empire</div>
-                        <div class="comm-item" onclick="loadChat('Admin Group')">👑 Admin Council</div>
-                        <div class="comm-item" onclick="loadChat('Private: Husel AI')">🤖 Husel AI (DM)</div>
-                        <div class="comm-item" onclick="alert('Starting Call...')">📞 Start Voice Call</div>
-                    </div>
-                    <div id="chat-window">
-                        <h4 id="active-chat-title">Global Empire</h4>
-                        <div id="chat-feed"></div>
-                        <div style="display:flex; gap:5px;">
-                            <input type="text" id="comm-input" placeholder="Message...">
-                            <button class="btn-primary" style="width:80px;" onclick="sendComm()">Send</button>
-                        </div>
-                        <button class="btn-primary" style="background:var(--tsfu-green);" onclick="startVoiceMsg()">🎤 Voice Memo</button>
-                    </div>
+                <div id="comm-feed" style="height:250px; overflow-y:auto; background:rgba(255,255,255,0.05); padding:15px; border-radius:12px; margin-bottom:15px;"></div>
+                <div style="display:flex; gap:10px;">
+                    <input type="text" id="comm-msg" placeholder="Type broadcast...">
+                    <button onclick="sendComm()" style="width:100px; border-radius:10px; border:none; background:var(--ht-accent); color:#fff;">Send</button>
                 </div>
+                <button class="btn-main" id="rec-btn" style="margin-top:10px; background:var(--tsfu-green);" onclick="toggleVoice()">🎤 RECORD VOICE MSG</button>
             </div>
         </div>
 
-        <div id="view-about" class="tab-view">
+        <div id="view-live" class="tab-view">
             <div class="card">
-                <h2>About the Spire</h2>
-                <p><strong>System:</strong> ULE Supreme v16.2</p>
-                <p><strong>Developed by:</strong> HyperTech Inc. / MIK King</p>
-                <p><strong>Core:</strong> 144Hz IPS Optimized | Android 16 Logic</p>
-                <p>This is the central node for all LCED operations. OLED screens and Clankers are forbidden.</p>
-            </div>
-        </div>
-
-        <div id="view-support" class="tab-view">
-            <div class="card">
-                <h2>Empire Support</h2>
-                <p>Need tech assistance? Submit a ticket to the MIK Council.</p>
-                <textarea placeholder="Describe the glitch..."></textarea>
-                <button class="btn-primary">Submit to HyperTech</button>
-                <p style="font-size:11px; margin-top:10px;">API Key Status: <span style="color:var(--tsfu-green);">ACTIVE</span></p>
+                <h2>Imperial Live (Redmi 15 Optimized)</h2>
+                <div id="cam-box"><video id="v-feed" autoplay playsinline muted></video></div>
+                <div class="btn-grid">
+                    <button class="btn-main" onclick="startCamera()">START CAM</button>
+                    <button class="btn-main" style="background:var(--danger);" onclick="stopCamera()">KILL FEED</button>
+                    <button class="btn-main" style="background:#444;" onclick="flipCamera()">ROTATE</button>
+                    <button class="btn-main" style="background:#444;" id="flash-btn" onclick="toggleFlash()">FLASH OFF</button>
+                </div>
+                <div style="margin-top:10px;">
+                    <button class="btn-main" style="background:#444;" onclick="toggleMic()">MIC: <span id="mic-label">ON</span></button>
+                </div>
             </div>
         </div>
 
         <div id="view-autofix" class="tab-view">
             <div class="card">
                 <h2>AutoFix Engine</h2>
-                <button class="btn-primary" onclick="runAutoFix()">Force System Calibration</button>
-                <div id="fix-log" style="font-family:monospace; font-size:12px; margin-top:10px; color:var(--tsfu-green);"></div>
+                <p>Run deep system repair to fix CSS and Logic ghosts.</p>
+                <button class="btn-main" onclick="executeFix()">EXECUTE GLOBAL REPAIR</button>
+                <div id="fix-log" style="font-family:monospace; font-size:11px; color:var(--tsfu-green); margin-top:15px;"></div>
             </div>
+        </div>
+
+        <div id="view-mod" class="tab-view">
+            <div class="card">
+                <h2>Moderation Vault</h2>
+                <div id="mod-list">
+                    <div style="padding:10px; border-bottom:1px solid #333; display:flex; justify-content:space-between;">
+                        <span>Guest_9921</span>
+                        <div>
+                            <button onclick="mod('Warned')" style="color:blue;">Warn</button>
+                            <button onclick="mod('Timed Out')" style="color:orange;">Time</button>
+                            <button onclick="mod('Banned')" style="color:red; font-weight:bold;">BAN</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="view-about" class="tab-view">
+            <div class="card"><h2>About Spire</h2><p>ULE Supreme v16.4 | MI Kings Ecosystem | 144Hz IPS Support</p></div>
+        </div>
+        <div id="view-support" class="tab-view">
+            <div class="card"><h2>Support</h2><textarea placeholder="Submit bug to LCED..."></textarea><button class="btn-main">Send Ticket</button></div>
         </div>
     </main>
 
     <script>
-        const ADMINS = ["real.hypertech.inc@gmail.com", "pepica104@outlook.com", "kingzarek4456@gmail.com"];
-        let user = JSON.parse(localStorage.getItem('ht_session')) || null;
-        let activeChat = "Global Community";
+        let currentStream = null;
+        let faceMode = "user";
+        let mic = true;
+        let flash = false;
+        let mediaRec; let chunks = [];
 
-        function verifyImperial() {
-            const e = document.getElementById('auth-email').value;
-            const p = document.getElementById('auth-pass').value;
-            if(ADMINS.includes(e) && p === "pero7373") {
-                user = { email: e, rank: "Admin", name: "Emperor MIK", pfp: "https://via.placeholder.com/60" };
-                localStorage.setItem('ht_session', JSON.stringify(user));
-                unlockUI();
-            } else { alert("VOID ACCESS REJECTED."); }
-        }
-
-        function unlockUI() {
-            document.getElementById('access-shield').style.display = 'none';
-            document.getElementById('side-name').innerText = user.name;
-            document.getElementById('pfp-sidebar').src = user.pfp;
-            showTab('comm');
-        }
-
-        function loadChat(name) {
-            activeChat = name;
-            document.getElementById('active-chat-title').innerText = name;
-            document.getElementById('chat-feed').innerHTML = `<div class="v-msg">System: Encrypted tunnel to ${name} established.</div>`;
-        }
-
-        function sendComm() {
-            const input = document.getElementById('comm-input');
-            if(!input.value) return;
-            const feed = document.getElementById('chat-feed');
-            feed.innerHTML += `<div class="v-msg" style="background:var(--ht-accent); align-self: flex-end;"><strong>You:</strong> ${input.value}</div>`;
-            input.value = "";
-            feed.scrollTop = feed.scrollHeight;
-        }
-
-        function runAutoFix() {
-            const log = document.getElementById('fix-log');
-            log.innerHTML += "> Resetting Android 16 Framework...<br>> Recalibrating 144Hz Buffer...<br>> 🟩 SPIRE IS OPTIMAL.";
-        }
-
-        function showTab(id) {
+        // --- CORE NAVIGATION ---
+        function tab(id) {
             document.querySelectorAll('.tab-view').forEach(v => v.classList.remove('active'));
             document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
             document.getElementById('view-' + id).classList.add('active');
-            document.getElementById('nav-' + id).classList.add('active');
+            event.currentTarget.classList.add('active');
         }
 
-        function handlePFP(e) {
-            const reader = new FileReader();
-            reader.onload = () => {
-                user.pfp = reader.result;
-                document.getElementById('pfp-sidebar').src = reader.result;
-                localStorage.setItem('ht_session', JSON.stringify(user));
-            };
-            reader.readAsDataURL(e.target.files[0]);
+        // --- CAMERA SUITE ---
+        async function startCamera() {
+            if(currentStream) stopCamera();
+            try {
+                currentStream = await navigator.mediaDevices.getUserMedia({ 
+                    video: { facingMode: faceMode }, 
+                    audio: mic 
+                });
+                document.getElementById('v-feed').srcObject = currentStream;
+            } catch(e) { alert("Camera Access Denied or No Flash Available on this Browser."); }
         }
 
-        if(user) unlockUI();
+        function stopCamera() { if(currentStream) currentStream.getTracks().forEach(t => t.stop()); }
+
+        function flipCamera() { faceMode = (faceMode === "user") ? "environment" : "user"; startCamera(); }
+
+        function toggleMic() { 
+            mic = !mic; 
+            if(currentStream) currentStream.getAudioTracks().forEach(t => t.enabled = mic);
+            document.getElementById('mic-label').innerText = mic ? "ON" : "OFF";
+        }
+
+        async function toggleFlash() {
+            const track = currentStream.getVideoTracks()[0];
+            flash = !flash;
+            try {
+                await track.applyConstraints({ advanced: [{ torch: flash }] });
+                document.getElementById('flash-btn').innerText = flash ? "FLASH ON" : "FLASH OFF";
+            } catch(e) { console.log("Flash not supported on this lens."); }
+        }
+
+        // --- COMMUNICATION ---
+        function sendComm() {
+            const msg = document.getElementById('comm-msg').value;
+            if(!msg) return;
+            const feed = document.getElementById('comm-feed');
+            feed.innerHTML += `<div style="margin-bottom:8px;"><strong>You:</strong> ${msg}</div>`;
+            document.getElementById('comm-msg').value = "";
+            feed.scrollTop = feed.scrollHeight;
+        }
+
+        async function toggleVoice() {
+            const btn = document.getElementById('rec-btn');
+            if(!mediaRec || mediaRec.state === "inactive") {
+                const s = await navigator.mediaDevices.getUserMedia({ audio: true });
+                mediaRec = new MediaRecorder(s);
+                mediaRec.ondataavailable = e => chunks.push(e.data);
+                mediaRec.onstop = () => {
+                    const blob = new Blob(chunks, { type: 'audio/ogg' });
+                    const url = URL.createObjectURL(blob);
+                    document.getElementById('comm-feed').innerHTML += `<div><strong>You:</strong> <audio src="${url}" controls style="height:25px;"></audio></div>`;
+                    chunks = [];
+                };
+                mediaRec.start();
+                btn.innerText = "🛑 STOP & BROADCAST";
+                btn.style.background = "red";
+            } else {
+                mediaRec.stop();
+                btn.innerText = "🎤 RECORD VOICE MSG";
+                btn.style.background = "var(--tsfu-green)";
+            }
+        }
+
+        // --- AUTOFIX & MOD ---
+        function executeFix() {
+            const log = document.getElementById('fix-log');
+            log.innerHTML += "> SCANNING FOR GHOST NODES...<br>> RE-SYNCING 144Hz BUFFER...<br>> 🟩 SPIRE REPAIRED.";
+        }
+
+        function mod(a) { alert("User action: " + a); }
+
+        function loadPFP(e) {
+            const r = new FileReader();
+            r.onload = () => document.getElementById('pfp-sidebar').src = r.result;
+            r.readAsDataURL(e.target.files[0]);
+        }
     </script>
 </body>
 </html>
