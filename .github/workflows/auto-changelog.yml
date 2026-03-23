@@ -1,0 +1,32 @@
+name: Auto Changelog Update
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Update Changelog
+        run: |
+          echo "## [$(date +'%Y-%m-%d')] Update" > new_entry.txt
+          git log -1 --pretty=format:"* %s" >> new_entry.txt
+          echo -e "\n" >> new_entry.txt
+          cat new_entry.txt Changelog.md > temp_changelog.md
+          mv temp_changelog.md Changelog.md
+          rm new_entry.txt
+
+      - name: Commit and Push
+        run: |
+          git config --global user.name "HyperTech-Bot"
+          git config --global user.email "real.hypertech.inc@gmail.com"
+          git add Changelog.md
+          git commit -m "🤖 [BOT] Update Changelog.md [skip ci]"
+          git push
