@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HyperTech | ULE Supreme v15.2</title>
+    <title>HyperTech | ULE Supreme v15.3</title>
     <style>
         :root {
             --ht-white: #ffffff;
@@ -60,6 +60,7 @@
 
         video { width: 100%; border-radius: 12px; background: #000; margin-top: 10px; }
         .post { background: var(--ht-silver); padding: 12px; border-radius: 10px; margin-top: 8px; border-left: 3px solid var(--ht-accent); font-size: 13px; }
+        .sync-pulse { font-size: 10px; color: var(--tsfu-green); float: right; }
     </style>
 </head>
 <body data-theme="light">
@@ -67,7 +68,7 @@
     <div id="access-shield">
         <div class="login-card">
             <h1>HYPERTECH</h1>
-            <p style="color:#8e8e93; font-size: 13px;">ULE Supreme v15.2</p>
+            <p style="color:#8e8e93; font-size: 13px;">ULE Supreme v15.3 [AUTO-SYNC]</p>
             <input type="email" id="auth-email" placeholder="Imperial Email">
             <button class="btn-primary" onclick="verifyImperial()">Verify Uplink</button>
             <button style="background:none; border:none; color:var(--ht-accent); margin-top:10px;" onclick="guestLogin()">Guest Access</button>
@@ -90,12 +91,14 @@
     <main>
         <div class="ai-status">
             UNIT: <span id="unit-name">...</span> | 144Hz | <span style="color:var(--tsfu-green);">TSFU</span>
+            <span class="sync-pulse" id="sync-indicator">● SYNCED</span>
         </div>
 
         <div id="view-dashboard" class="tab-view active">
             <div class="card">
                 <h2>Empire Hub</h2>
-                <p>Welcome back, King Zarek 1. All systems 🟩 nominal.</p>
+                <p>Auto-Refresh Pulse: <strong>Active (5s)</strong></p>
+                <p>Welcome back, King Zarek 1. All systems nominal.</p>
             </div>
         </div>
 
@@ -145,6 +148,16 @@
             document.getElementById('unit-name').innerText = navigator.userAgent.includes("Android") ? "Redmi 15 4G" : "Node";
             loadForum();
             applyTheme();
+            // START THE AUTO-PULSE
+            setInterval(autoSync, 5000);
+        }
+
+        function autoSync() {
+            loadForum();
+            const ind = document.getElementById('sync-indicator');
+            ind.style.opacity = 0.3;
+            setTimeout(() => ind.style.opacity = 1, 500);
+            console.log("HyperTech Sync Pulse Complete.");
         }
 
         function showTab(id) {
@@ -185,12 +198,11 @@
             try {
                 const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
                 document.getElementById('video-preview').srcObject = stream;
-            } catch (e) { alert("Hardware Blocked. Check Settings."); }
+            } catch (e) { alert("Hardware Blocked."); }
         }
 
         function clearLogs() { localStorage.clear(); location.reload(); }
 
-        // Auto-unlock if already logged in
         if(currentUser) unlockUI();
     </script>
 </body>
