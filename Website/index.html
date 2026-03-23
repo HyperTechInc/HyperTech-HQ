@@ -3,41 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>HyperTech | ULE Supreme v16.8</title>
+    <title>HyperTech | ULE Supreme v17.0</title>
     <style>
         :root { 
             --accent: #0a84ff; --bg: #000000; --card: #1c1c1e; --text: #ffffff; 
-            --green: #34c759; --danger: #ff3b30; --border: #333333;
+            --green: #34c759; --danger: #ff3b30; --border: #333333; --warn: #ffcc00;
         }
         body { background: var(--bg); color: var(--text); font-family: -apple-system, sans-serif; margin: 0; display: flex; height: 100vh; overflow: hidden; }
         
         /* SIDEBAR NAVIGATION */
         #sidebar { width: 240px; background: #000; border-right: 1px solid var(--border); display: flex; flex-direction: column; padding: 20px; flex-shrink: 0; }
-        .nav-item { padding: 12px; margin: 4px 0; border-radius: 10px; color: #888; cursor: pointer; font-weight: 600; font-size: 14px; display: flex; align-items: center; transition: 0.2s; }
+        .nav-item { padding: 12px; margin: 4px 0; border-radius: 10px; color: #888; cursor: pointer; font-weight: 600; font-size: 14px; transition: 0.2s; display: flex; align-items: center; }
         .nav-item:hover { background: #111; color: #fff; }
         .nav-item.active { background: var(--accent); color: #fff; }
+        .status-dot { width: 8px; height: 8px; background: var(--green); border-radius: 50%; display: inline-block; margin-right: 8px; box-shadow: 0 0 10px var(--green); }
         
-        /* MAIN CONTENT AREA */
+        /* MAIN CONTENT */
         main { flex: 1; overflow-y: auto; padding: 20px; background: #050505; }
         .card { background: var(--card); border-radius: 20px; padding: 20px; border: 1px solid var(--border); margin-bottom: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
         .tab-view { display: none; }
         .tab-view.active { display: block; animation: fadeIn 0.3s ease; }
 
-        /* COMM UI */
-        .comm-container { display: grid; grid-template-columns: 180px 1fr; gap: 15px; height: 500px; }
-        .comm-sidebar { border-right: 1px solid var(--border); padding-right: 10px; overflow-y: auto; }
-        .comm-item { padding: 10px; border-radius: 8px; margin-bottom: 5px; cursor: pointer; font-size: 13px; background: #111; }
-        .comm-item.active { border-left: 3px solid var(--accent); background: #222; }
-        #chat-feed { flex: 1; overflow-y: auto; background: rgba(0,0,0,0.3); border-radius: 12px; padding: 15px; margin-bottom: 10px; border: 1px solid var(--border); }
+        /* MODERATION ARSENAL */
+        .mod-row { padding: 15px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; background: #111; border-radius: 12px; margin-bottom: 10px; }
+        .mod-btns { display: flex; gap: 5px; flex-wrap: wrap; }
+        .m-btn { padding: 6px 10px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 10px; color: #fff; }
         
-        /* CAMERA */
-        #cam-box { width: 100%; border-radius: 15px; background: #000; aspect-ratio: 16/9; overflow: hidden; border: 2px solid var(--border); }
-        video { width: 100%; height: 100%; object-fit: cover; }
-        .btn-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px; }
-
-        /* BUTTONS */
-        .btn-main { width: 100%; padding: 12px; background: var(--accent); border: none; border-radius: 10px; color: #fff; font-weight: 700; cursor: pointer; transition: 0.2s; }
-        .btn-main:active { transform: scale(0.98); }
+        /* INPUTS */
+        .btn-main { width: 100%; padding: 12px; background: var(--accent); border: none; border-radius: 10px; color: #fff; font-weight: 700; cursor: pointer; }
         input, textarea { width: 100%; padding: 12px; background: #2c2c2e; border: 1px solid #444; border-radius: 10px; color: #fff; margin: 8px 0; box-sizing: border-box; outline: none; }
 
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
@@ -46,79 +39,70 @@
 <body>
 
     <aside id="sidebar">
-        <input type="file" id="pfp-upload" style="display:none;" accept="image/*" onchange="loadPFP(event)">
-        <img id="pfp-sidebar" src="https://via.placeholder.com/70" onclick="document.getElementById('pfp-upload').click()" style="width:70px; height:70px; border-radius:50%; border:3px solid var(--accent); cursor:pointer; object-fit: cover;">
+        <img id="pfp-sidebar" src="https://via.placeholder.com/70" style="width:70px; height:70px; border-radius:50%; border:3px solid var(--accent); object-fit: cover;">
         <div id="side-name" style="font-weight:900; margin-top:15px; font-size:18px;">EMPEROR MIK</div>
-        <div style="font-size:11px; color:var(--green); margin-bottom:20px;">● SYSTEM ENCRYPTED</div>
+        <div style="font-size:11px; margin-bottom:20px;"><span class="status-dot"></span> GEMINI ONLINE</div>
         
         <nav>
             <div class="nav-item active" onclick="tab('comm', this)">📱 Imperial Comm</div>
-            <div class="nav-item" onclick="tab('live', this)">📹 Imperial Live</div>
             <div class="nav-item" onclick="tab('mod', this)">⚖️ Moderation</div>
             <div class="nav-item" onclick="tab('settings', this)">⚙️ Settings</div>
             <div class="nav-item" onclick="tab('autofix', this)">🛠️ AutoFix</div>
-            <div class="nav-item" onclick="tab('support', this)">🆘 Support</div>
         </nav>
     </aside>
 
     <main>
         <div id="view-comm" class="tab-view active">
-            <div class="card" style="height: 600px;">
-                <div class="comm-container">
-                    <div class="comm-sidebar">
-                        <div class="comm-item active" onclick="setChannel('Global Empire')">🌐 Global Empire</div>
-                        <div class="comm-item" onclick="setChannel('MIK Council')">👑 Council HQ</div>
-                    </div>
-                    <div style="display:flex; flex-direction:column; height:100%;">
-                        <h3 id="active-chat-title">Global Empire</h3>
-                        <div id="chat-feed"></div>
-                        <input type="text" id="comm-msg" placeholder="Broadcast message...">
-                        <button class="btn-main" onclick="sendComm()" style="margin-top:5px;">Send Broadcast</button>
-                    </div>
+            <div class="card" style="height: 550px; display: flex; flex-direction: column;">
+                <h3>Global Empire Feed</h3>
+                <div id="chat-feed" style="flex:1; overflow-y:auto; background:rgba(0,0,0,0.3); border-radius:12px; padding:15px; margin-bottom:10px; border:1px solid var(--border);">
+                    <div style="color:var(--accent); font-weight:bold;">[SYSTEM]: Gemini connected via bosanskasirnica001@gmail.com</div>
+                </div>
+                <div style="display:flex; gap:10px;">
+                    <input type="text" id="m-in" placeholder="Command...">
+                    <button onclick="send()" style="width:80px; background:var(--accent); border:none; border-radius:10px; color:#fff;">Send</button>
                 </div>
             </div>
         </div>
 
-        <div id="view-live" class="tab-view">
+        <div id="view-mod" class="tab-view">
             <div class="card">
-                <h2>Imperial Live Feed</h2>
-                <div id="cam-box"><video id="v-feed" autoplay playsinline muted></video></div>
-                <div class="btn-grid">
-                    <button class="btn-main" onclick="startCamera()">START LIVE</button>
-                    <button class="btn-main" style="background:var(--danger);" onclick="stopCamera()">END LIVE</button>
+                <h2>Moderation Arsenal</h2>
+                <textarea id="mod-reason" placeholder="Penalty Message (e.g. Clanker activity)..."></textarea>
+                <div class="mod-row" id="target-1">
+                    <div><strong>Guest_771</strong></div>
+                    <div class="mod-btns">
+                        <button class="m-btn" style="background:var(--warn); color:#000;" onclick="mod('Warned', 'target-1')">WARN</button>
+                        <button class="m-btn" style="background:#5856d6;" onclick="mod('Timed Out', 'target-1')">TIME</button>
+                        <button class="m-btn" style="background:#af52de;" onclick="mod('T-Banned', 'target-1', true)">T-BAN</button>
+                        <button class="m-btn" style="background:var(--danger);" onclick="mod('Perm-Banned', 'target-1', true)">PERM</button>
+                    </div>
                 </div>
+                <div id="mod-logs" style="font-family:monospace; font-size:11px; color:var(--green); margin-top:10px;"></div>
             </div>
         </div>
 
         <div id="view-settings" class="tab-view">
             <div class="card">
                 <h2>Imperial Settings</h2>
-                <div style="margin-bottom:20px; border-bottom:1px solid #333; padding-bottom:15px;">
-                    <label>Identity Management</label>
-                    <input type="text" id="acc-name-in" placeholder="Update Imperial Name...">
-                    <button class="btn-main" onclick="updateAccount()">Apply Identity Change</button>
-                </div>
-                
-                <div style="margin-top:20px;">
-                    <label style="color:var(--danger);">System Security</label>
-                    <p style="font-size:12px; color:#888;">Clear all local cache and end current session.</p>
-                    <button class="btn-main" style="background:var(--danger);" onclick="forceLogout()">⚠️ FORCE LOGOUT & WIPE</button>
-                </div>
+                <p><strong>Uplink:</strong> bosanskasirnica001@gmail.com</p>
+                <input type="text" id="new-name" placeholder="Change Imperial Name...">
+                <button class="btn-main" onclick="updateName()" style="margin-bottom:20px;">Apply Identity</button>
+                <label style="color:var(--danger);">Security Sector</label>
+                <button class="btn-main" style="background:var(--danger);" onclick="forceLogout()">⚠️ FORCE LOGOUT & WIPE</button>
             </div>
         </div>
-
+        
         <div id="view-autofix" class="tab-view">
             <div class="card">
                 <h2>AutoFix Engine</h2>
-                <button class="btn-main" onclick="executeFix()">EXECUTE GLOBAL REPAIR</button>
-                <div id="fix-log" style="font-family:monospace; color:var(--green); margin-top:15px;"></div>
+                <button class="btn-main" onclick="runFix()">EXECUTE GLOBAL REPAIR</button>
+                <div id="f-log" style="font-family:monospace; color:var(--green); margin-top:15px;"></div>
             </div>
         </div>
     </main>
 
     <script>
-        let stream = null;
-
         function tab(id, el) {
             document.querySelectorAll('.tab-view').forEach(v => v.classList.remove('active'));
             document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
@@ -126,45 +110,35 @@
             el.classList.add('active');
         }
 
-        function sendComm() {
-            const input = document.getElementById('comm-msg');
-            if(!input.value) return;
-            document.getElementById('chat-feed').innerHTML += `<div style="margin-bottom:10px;"><strong>You:</strong> ${input.value}</div>`;
-            input.value = "";
-            document.getElementById('chat-feed').scrollTop = 9999;
+        function send() {
+            const i = document.getElementById('m-in');
+            if(!i.value) return;
+            const f = document.getElementById('chat-feed');
+            f.innerHTML += `<div><strong>You:</strong> ${i.value}</div>`;
+            i.value = ""; f.scrollTop = f.scrollHeight;
         }
 
-        async function startCamera() {
-            stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
-            document.getElementById('v-feed').srcObject = stream;
-        }
-
-        function stopCamera() { if(stream) stream.getTracks().forEach(t => t.stop()); }
-
-        function updateAccount() {
-            const name = document.getElementById('acc-name-in').value;
-            if(name) { 
-                document.getElementById('side-name').innerText = name; 
-                alert("Identity Updated, My King."); 
+        function mod(act, id, kick = false) {
+            const reason = document.getElementById('mod-reason').value || "Standard purge.";
+            document.getElementById('mod-logs').innerHTML += `[${new Date().toLocaleTimeString()}] ${act}: ${reason}<br>`;
+            if(kick) {
+                document.getElementById(id).style.opacity = "0.2";
+                document.getElementById(id).innerHTML = "ELIMINATED";
             }
+            alert(act + " applied. Reason: " + reason);
+        }
+
+        function updateName() {
+            const n = document.getElementById('new-name').value;
+            if(n) { document.getElementById('side-name').innerText = n; alert("Name Updated."); }
         }
 
         function forceLogout() {
-            if(confirm("Confirm Sector Wipe? All local Imperial data will be purged.")) {
-                localStorage.clear();
-                alert("Cache Purged. Logging out...");
-                location.reload(); 
-            }
+            if(confirm("Confirm Nuclear Wipe?")) { localStorage.clear(); location.reload(); }
         }
 
-        function loadPFP(e) {
-            const r = new FileReader();
-            r.onload = () => document.getElementById('pfp-sidebar').src = r.result;
-            r.readAsDataURL(e.target.files[0]);
-        }
-
-        function executeFix() {
-            document.getElementById('fix-log').innerHTML = "> Resyncing 144Hz...<br>> 🟩 SYSTEM OPTIMAL.";
+        function runFix() {
+            document.getElementById('f-log').innerHTML = "> Resyncing 144Hz...<br>> Rebuilding HyperConnect...<br>> 🟩 SPIRE REPAIRED.";
         }
     </script>
 </body>
