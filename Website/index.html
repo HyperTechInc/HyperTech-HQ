@@ -3,233 +3,215 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>MIK | EMPIRE CONTROL CENTER v22.0</title>
+    <title>MIK | CLOUD-GATE v23.0</title>
+    <script type="importmap">
+      { "imports": { "@google/generative-ai": "https://esm.run/@google/generative-ai" } }
+    </script>
     <style>
         :root { 
             --accent: #0a84ff; --bg: #000; --card: #0a0a0b; --text: #d1d1d6; 
-            --green: #30d158; --danger: #ff453a; --border: #1c1c1e; 
-            --nuclear: #bf5af2; --gold: #ffd60a;
+            --green: #30d158; --danger: #ff453a; --border: #1c1c1e; --gold: #ffd60a;
         }
-        * { box-sizing: border-box; font-family: 'Courier New', Courier, monospace; }
+        * { box-sizing: border-box; font-family: 'Consolas', 'Courier New', monospace; }
         body { background: var(--bg); color: var(--text); margin: 0; display: flex; height: 100vh; overflow: hidden; }
-        
-        /* IMPERIAL SIDEBAR */
-        #sidebar { width: 320px; background: #000; border-right: 2px solid var(--accent); display: flex; flex-direction: column; padding: 15px; flex-shrink: 0; overflow-y: auto; }
-        .sidebar-header { border-bottom: 1px solid var(--border); padding-bottom: 20px; margin-bottom: 15px; text-align: center; }
-        .nav-item { padding: 14px; margin: 4px 0; border: 1px solid #111; border-radius: 4px; color: #555; cursor: pointer; font-size: 11px; display: flex; align-items: center; transition: 0.2s; text-transform: uppercase; font-weight: bold; }
-        .nav-item:hover { border-color: var(--accent); color: #fff; background: #0a84ff11; }
-        .nav-item.active { background: #0a84ff22; border-color: var(--accent); color: #fff; box-shadow: 0 0 10px #0a84ff44; }
 
-        /* MAIN COMMAND DECK */
-        main { flex: 1; overflow-y: auto; padding: 25px; background: radial-gradient(circle at 50% 50%, #0d0d0d 0%, #000 100%); }
+        /* CLOUD LOGIN OVERLAY */
+        #login-overlay { position: fixed; inset: 0; background: #000; z-index: 9999; display: flex; align-items: center; justify-content: center; flex-direction: column; }
+        .login-card { background: #0a0a0a; padding: 40px; border: 1px solid var(--accent); text-align: center; box-shadow: 0 0 50px #0a84ff33; }
+        .login-input { background: #000; border: 1px solid #333; color: var(--green); padding: 10px; margin: 10px 0; width: 250px; text-align: center; }
+
+        /* IMPERIAL SIDEBAR */
+        #sidebar { width: 320px; background: #000; border-right: 2px solid var(--accent); display: flex; flex-direction: column; padding: 15px; flex-shrink: 0; }
+        .nav-item { padding: 14px; margin: 4px 0; border: 1px solid #111; border-radius: 4px; color: #555; cursor: pointer; font-size: 11px; display: flex; align-items: center; transition: 0.2s; text-transform: uppercase; font-weight: bold; }
+        .nav-item.active { background: #0a84ff22; border-color: var(--accent); color: #fff; }
+
+        /* MAIN DECK */
+        main { flex: 1; overflow-y: auto; padding: 25px; background: radial-gradient(circle at 50% 50%, #0d0d0d 0%, #000 100%); display: none; }
         .tab-view { display: none; }
         .tab-view.active { display: block; animation: powerOn 0.5s ease; }
         
-        .card { background: var(--card); border: 1px solid var(--border); padding: 20px; margin-bottom: 20px; border-radius: 0; position: relative; border-left: 4px solid var(--accent); }
+        .card { background: var(--card); border: 1px solid var(--border); padding: 20px; margin-bottom: 20px; border-left: 4px solid var(--accent); }
         .card-title { font-size: 12px; color: var(--accent); margin-bottom: 15px; font-weight: 900; letter-spacing: 2px; text-transform: uppercase; display: flex; justify-content: space-between;}
 
-        /* COMM HUB UI */
-        .chat-box { height: 250px; background: #050505; border: 1px solid #222; display: flex; flex-direction: column; margin-top: 10px;}
-        #chat-window { flex: 1; padding: 10px; overflow-y: auto; font-size: 11px; color: var(--green); }
-        .chat-input-area { display: flex; border-top: 1px solid #222; }
-        .chat-input-area input { flex: 1; background: #000; border: none; color: #fff; padding: 10px; font-family: monospace; }
+        /* COMM HUB (CHATFUL AI) */
+        .chat-box { height: 300px; background: #050505; border: 1px solid #222; display: flex; flex-direction: column; margin-top: 10px;}
+        #chat-window { flex: 1; padding: 10px; overflow-y: auto; font-size: 11px; }
+        .msg { margin-bottom: 8px; line-height: 1.4; }
+        .king { color: var(--gold); font-weight: bold; }
+        .spire { color: var(--accent); }
 
-        /* REDMI 15 LABS VIZ */
-        .chem-lab { height: 100px; background: #000; border: 1px dashed var(--gold); position: relative; overflow: hidden; margin: 10px 0; }
-        .bubble { position: absolute; bottom: -20px; width: 10px; height: 10px; background: var(--gold); border-radius: 50%; animation: rise 2s infinite ease-in; opacity: 0.6; }
+        /* CALLING INTERFACE */
+        #call-ui { position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 10000; display: none; flex-direction: column; align-items: center; justify-content: center; }
+        .video-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; width: 80%; }
+        video { width: 100%; border: 2px solid var(--accent); background: #111; border-radius: 10px; }
 
-        /* NATIONAL BUTTONS */
-        .hz-btn { padding: 12px; background: #111; border: 1px solid #333; color: #fff; cursor: pointer; font-weight: 900; font-size: 10px; text-transform: uppercase; }
-        .hz-btn:hover { background: var(--accent); }
-        .btn-nuke { background: #300; border-color: var(--danger); color: var(--danger); }
-        .btn-nuke:hover { background: var(--danger); color: #000; }
+        .btn-action { padding: 12px; background: #111; border: 1px solid var(--accent); color: #fff; cursor: pointer; font-weight: bold; }
+        .btn-action:hover { background: var(--accent); color: #000; }
 
-        /* TERMINAL */
-        .term { background: #000; color: var(--green); padding: 10px; font-size: 10px; height: 120px; overflow-y: auto; border: 1px solid #222; margin-top: 10px; }
-
-        @keyframes rise { from { transform: translateY(0); } to { transform: translateY(-120px); opacity: 0; } }
-        @keyframes powerOn { from { opacity: 0; filter: brightness(2); } to { opacity: 1; filter: brightness(1); } }
+        @keyframes powerOn { from { opacity: 0; } to { opacity: 1; } }
     </style>
 </head>
 <body>
 
+    <div id="login-overlay">
+        <div class="login-card">
+            <h2 style="color:var(--accent); letter-spacing:5px;">CLOUD_GATE v23</h2>
+            <p style="font-size:10px; color:#666;">AUTHORIZATION REQUIRED: bosanskasirnica001</p>
+            <input type="password" id="passkey" class="login-input" placeholder="ROYAL_ACCESS_KEY">
+            <br>
+            <button class="btn-action" onclick="login()">LINK CLOUD</button>
+        </div>
+    </div>
+
+    <div id="call-ui">
+        <h1 style="color:var(--green); animation: pulse 1s infinite;">● LIVE_ENCRYPTED_CALL</h1>
+        <div class="video-grid">
+            <div><p>KING_POV</p><video id="local-video" autoplay muted></video></div>
+            <div><p>COUNCIL_POV</p><video id="remote-video" autoplay loop src="https://www.w3schools.com/html/mov_bbb.mp4"></video></div>
+        </div>
+        <button class="btn-action" style="margin-top:20px; border-color:red; color:red;" onclick="endCall()">TERMINATE UPLINK</button>
+    </div>
+
     <aside id="sidebar">
-        <div class="sidebar-header">
-            <div style="font-size: 10px; color: var(--gold);">BANJA LUKA SECTOR</div>
-            <div style="font-size: 20px; font-weight: 900; color: #fff; letter-spacing: 3px;">KINGZAREK1</div>
-            <div style="font-size: 8px; color: var(--green);">UPLINK: bosanskasirnica001@gmail.com</div>
+        <div style="text-align:center; padding:20px 0; border-bottom:1px solid #222;">
+            <div style="font-size:20px; font-weight:900; color:white;">MIK_OVERLORD</div>
+            <div style="font-size:9px; color:var(--green);">CLOUD_SYNC: ACTIVE</div>
         </div>
-
-        <nav id="master-nav">
+        <nav>
             <div class="nav-item active" onclick="tab('core', this)">📡 NATION_DASHBOARD</div>
-            <div class="nav-item" onclick="tab('comm', this)">📱 IMPERIAL_COMM</div>
-            <div class="nav-item" onclick="tab('hz', this)">⚡ REFRESH_CONTROL</div>
-            <div class="nav-item" onclick="tab('live', this)">📹 TACTICAL_LIVE</div>
-            <div class="nav-item" onclick="tab('mod', this)">⚖️ MOD_ARSENAL</div>
-            <div class="nav-item" onclick="tab('hardware', this)">🧪 REDMI_15_LABS</div>
-            <div class="nav-item" onclick="tab('hatred', this)">💀 HATRED_LOGS</div>
-            <div class="nav-item" onclick="tab('settings', this)">☢️ NUCLEAR_SETTINGS</div>
+            <div class="nav-item" onclick="tab('comm', this)">📱 IMPERIAL_COMM_AI</div>
+            <div class="nav-item" onclick="tab('labs', this)">🧪 REDMI_15_LABS</div>
+            <div class="nav-item" onclick="tab('nuke', this)">☢️ NUCLEAR_PROTOCOLS</div>
         </nav>
-
-        <div style="margin-top:auto; padding:10px; background:#050505; border:1px solid #111; font-size:9px;">
-            DEVICE: REDMI 15 4G<br>
-            OS: HYPEROS 3 (A16)<br>
-            STATUS: 🟩 TSFU ACTIVE
-        </div>
     </aside>
 
-    <main>
+    <main id="main-deck">
         <div id="view-core" class="tab-view active">
             <div class="card">
-                <div class="card-title">EMPIRE_RESOURCES</div>
+                <div class="card-title">CLOUD_RESOURCE_FEED</div>
                 <div style="font-size:11px;">
-                    > SIZPSA Stability: <span style="color:var(--green)">🟩 NOMINAL</span><br>
-                    > ISP Asteroid Shield: <span style="color:var(--green)">🟩 100%</span><br>
-                    > BotZarek Squad: <span style="color:var(--accent)">10 BOTS STANDING BY</span>
+                    > AUTO_FIX AI: <span style="color:var(--green)">CONNECTED</span><br>
+                    > CLOUD_MODERATION: <span style="color:var(--green)">ENABLED</span><br>
+                    > SPIRE_LATENCY: <span style="color:var(--accent)">0.001ms</span>
                 </div>
             </div>
         </div>
 
         <div id="view-comm" class="tab-view">
             <div class="card">
-                <div class="card-title">IMPERIAL_COMM_HUB [MIK_SYNC]</div>
+                <div class="card-title">IMPERIAL_CHAT_AI (GENERIC-AI v2)</div>
                 <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
-                    <button class="hz-btn" style="border-color:var(--green); color:var(--green);" onclick="triggerCall()">📞 CALL COUNCIL</button>
-                    <button class="hz-btn" onclick="alert('VOICEMAIL: bosanskasirnica001@gmail.com is secure.')">📟 VOICEMAIL</button>
+                    <button class="btn-action" style="color:var(--green);" onclick="startCall()">VIDEO_CALL</button>
+                    <button class="btn-action" onclick="playVoicemail()">VOICEMAIL (1)</button>
                 </div>
                 <div class="chat-box">
-                    <div id="chat-window">> Welcome, King. The Spire is listening.</div>
+                    <div id="chat-window"></div>
                     <div class="chat-input-area">
-                        <input type="text" id="chat-msg" placeholder="Send Imperial Decree...">
-                        <button class="hz-btn" style="border:none; background:var(--accent);" onclick="sendImperialChat()">SEND</button>
+                        <input type="text" id="chat-in" placeholder="Talk to the Spire...">
+                        <button class="btn-action" style="border:none;" onclick="talkToAI()">DECREE</button>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div id="view-hz" class="tab-view">
-            <div class="card">
-                <div class="card-title">HZ_ZONE_INJECTOR (MRRAO)</div>
-                <div class="hz-control" style="display:flex; gap:5px;">
-                    <button class="hz-btn" style="flex:1;" onclick="setHz(1, this)">1 Hz</button>
-                    <button class="hz-btn" style="flex:1;" onclick="setHz(144, this)">144 Hz</button>
-                </div>
-                <div class="term" id="hz-term">> SYNCING LCD IPS PANEL...</div>
-            </div>
-        </div>
-
-        <div id="view-hardware" class="tab-view">
+        <div id="view-labs" class="tab-view">
             <div class="card" style="border-left-color: var(--gold);">
-                <div class="card-title" style="color:var(--gold);">🧪 REDMI_15_CHEMICAL_LABS</div>
-                <div class="chem-lab" id="lab-viz"></div>
-                <div style="font-size:10px; margin-bottom:10px;">
-                    CORE: Si-C-Graphene-Saltion<br>
-                    STATUS: UNSTABLE_HIGH_CAPACITY
-                </div>
-                <button class="hz-btn" style="width:100%;" onclick="injectSaltion()">INJECT_SALTION_CORE</button>
-                <div class="term" id="lab-term">> AWAITING CHEMICAL INPUT...</div>
+                <div class="card-title">🧪 REDMI_15_LABS_AI_FIX</div>
+                <p style="font-size:10px;">REPORT PROBLEM TO AUTO-FIX AI:</p>
+                <input type="text" id="prob-input" class="login-input" style="width:100%; text-align:left;" placeholder="e.g. Battery unstable at 250W">
+                <button class="btn-action" style="width:100%; margin-top:10px;" onclick="autoFix()">EXECUTE AUTO-FIX</button>
+                <div id="fix-log" style="font-size:10px; color:var(--green); margin-top:10px;"></div>
             </div>
         </div>
 
-        <div id="view-settings" class="tab-view">
+        <div id="view-nuke" class="tab-view">
             <div class="card" style="border-left-color: var(--danger);">
-                <div class="card-title" style="color:var(--danger);">☢️ NUCLEAR_PROTOCOLS [ŉ]</div>
-                <button class="hz-btn btn-nuke" style="width:100%; margin-bottom:10px;" onclick="nukeWipe()">ŉ CATASTROPHIC_WIPE</button>
-                <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
-                    <button class="hz-btn" onclick="alert('[MODEL SWITCH] -> GREEN MODE')">SWITCH_MODEL</button>
-                    <button class="hz-btn" onclick="alert('VPN TUNNEL: RECONNECTED')">VPN_AUTO_CONNECT</button>
-                </div>
-                <div class="term" style="color:var(--danger);">> WARNING: Sector Wipe is irreversible.</div>
-            </div>
-        </div>
-
-        <div id="view-live" class="tab-view">
-             <div class="card">
-                <div class="card-title">TACTICAL_LIVE</div>
-                <button class="hz-btn" onclick="startTactical()">INITIATE DRONE</button>
-                <video id="v-feed" autoplay style="width:100%; margin-top:10px;"></video>
-             </div>
-        </div>
-
-        <div id="view-mod" class="tab-view">
-            <div class="card">
-                <div class="card-title">MOD_ARSENAL</div>
-                <input type="text" id="target" placeholder="TARGET" style="width:100%; background:#000; border:1px solid #333; color:white; padding:10px; margin-bottom:10px;">
-                <button class="hz-btn" style="background:var(--danger);" onclick="mod('PURGE')">EXECUTE PURGE</button>
-                <div class="term" id="mod-term"></div>
-            </div>
-        </div>
-
-        <div id="view-hatred" class="tab-view">
-            <div class="card" style="border-left-color:red;">
-                <div class="card-title" style="color:red;">HATRED_LOGS</div>
-                <div class="term" style="color:red; height:200px;">[!] SHED_DETECTED... [!] BOSS_MODE_ACTIVE...</div>
+                <div class="card-title">☢️ NUCLEAR_ŉ_CLOUD_WIPE</div>
+                <button class="btn-action" style="background:#200; color:red; width:100%;" onclick="nuke()">INITIALIZE CLOUD_WIPE</button>
             </div>
         </div>
     </main>
 
-    <script>
-        function tab(id, el) {
+    <script type="module">
+        import { GoogleGenerativeAI } from "@google/generative-ai";
+
+        // THE KING'S CLOUD KEY
+        const API_KEY = "AIzaSyCyG5yapEekcUk3hNRlB_qQX2N7Z2r4PhI";
+        const genAI = new GoogleGenerativeAI(API_KEY);
+        const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+
+        window.login = () => {
+            const pass = document.getElementById('passkey').value;
+            if(pass === "25062RN2DY") { // Model ID is the password
+                document.getElementById('login-overlay').style.display = 'none';
+                document.getElementById('main-deck').style.display = 'block';
+            } else { alert("ACCESS DENIED: CLANKER DETECTED."); }
+        };
+
+        window.tab = (id, el) => {
             document.querySelectorAll('.tab-view').forEach(v => v.classList.remove('active'));
             document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
             document.getElementById('view-' + id).classList.add('active');
             el.classList.add('active');
-        }
+        };
 
-        function triggerCall() {
-            alert("⚠️ MIK_ENCRYPTION: CALLING THE COUNCIL...");
-        }
-
-        function sendImperialChat() {
-            const input = document.getElementById('chat-msg');
+        window.talkToAI = async () => {
+            const input = document.getElementById('chat-in');
             const win = document.getElementById('chat-window');
             if(!input.value) return;
-            win.innerHTML += `<br><span style="color:#fff;">KING:</span> ${input.value}`;
-            setTimeout(() => {
-                win.innerHTML += `<br><span style="color:var(--accent);">SPIRE:</span> Command Acknowledged.`;
-                win.scrollTop = win.scrollHeight;
-            }, 500);
-            input.value = "";
-        }
 
-        function injectSaltion() {
-            const viz = document.getElementById('lab-viz');
-            const term = document.getElementById('lab-term');
-            viz.innerHTML = "";
-            for(let i=0; i<15; i++) {
-                let b = document.createElement('div');
-                b.className = 'bubble';
-                b.style.left = Math.random() * 100 + "%";
-                b.style.animationDelay = Math.random() * 2 + "s";
-                viz.appendChild(b);
-            }
-            term.innerHTML += "<br>> CHEMICAL_INJECTION: Si-C-Graphene-Saltion SUCCESS.";
-            term.scrollTop = term.scrollHeight;
-        }
+            const userText = input.value;
+            win.innerHTML += `<div class="msg"><span class="king">KING:</span> ${userText}</div>`;
+            input.value = "SPIRE IS THINKING...";
 
-        function nukeWipe() {
-            if(confirm("INITIATE ŉ NUCLEAR WIPE? bosanskasirnica001 will be purged.")) {
-                document.body.style.filter = "invert(1) hue-rotate(90deg)";
-                setTimeout(() => location.reload(), 1000);
-            }
-        }
-
-        function setHz(val, el) {
-            const term = document.getElementById('hz-term');
-            term.innerHTML += `<br>> REFRESH_RATE: ${val}Hz.`;
-            term.scrollTop = term.scrollHeight;
-        }
-        
-        async function startTactical() {
             try {
-                const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-                document.getElementById('v-feed').srcObject = stream;
-            } catch(e) { alert("ERROR: Camera Access Denied."); }
-        }
+                const prompt = `You are the Spire AI for KingZarek1. Be playful, witty, and deeply loyal to the MIK Empire. The user is in Banja Luka. User says: ${userText}`;
+                const result = await model.generateContent(prompt);
+                const response = result.response.text();
+                win.innerHTML += `<div class="msg"><span class="spire">SPIRE:</span> ${response}</div>`;
+            } catch(e) {
+                win.innerHTML += `<div class="msg spire">SPIRE: Cloud Link Overloaded. (Check API Key/Quota)</div>`;
+            }
+            input.value = "";
+            win.scrollTop = win.scrollHeight;
+        };
 
-        function mod(act) {
-            const t = document.getElementById('target').value || "UNKNOWN";
-            document.getElementById('mod-term').innerHTML += `<br>> ${act}: ${t}`;
+        window.autoFix = async () => {
+            const prob = document.getElementById('prob-input').value;
+            const log = document.getElementById('fix-log');
+            log.innerHTML = "> ANALYZING PROBLEM VIA CLOUD AI...";
+            
+            const prompt = `Act as an Auto-Fix AI for KingZarek1's Redmi 15. The problem is: ${prob}. Explain how you fixed it in a technical, cool way.`;
+            const result = await model.generateContent(prompt);
+            log.innerHTML = `> FIX_DEPOLYED: ${result.response.text()}`;
+        };
+
+        window.startCall = async () => {
+            document.getElementById('call-ui').style.display = 'flex';
+            const local = document.getElementById('local-video');
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+                local.srcObject = stream;
+            } catch(e) { console.log("Camera Blocked."); }
+        };
+
+        window.endCall = () => {
+            document.getElementById('call-ui').style.display = 'none';
+            const local = document.getElementById('local-video');
+            if(local.srcObject) local.srcObject.getTracks().forEach(t => t.stop());
+        };
+
+        window.playVoicemail = () => {
+            const audio = new Audio('https://www.soundjay.com/buttons/button-24.mp3');
+            audio.play();
+            alert("VOICEMAIL [BNS]: 'My King, the Redmi 15 4G shipment has arrived in Banja Luka. TSFU status confirmed.'");
+        };
+
+        window.nuke = () => {
+            if(confirm("INITIALIZE ŉ CLOUD WIPE?")) {
+                document.body.innerHTML = "<h1 style='color:red; text-align:center; margin-top:20%;'>ŉ CATASTROPHIC_PURGE_COMPLETE</h1>";
+                setTimeout(() => location.reload(), 2000);
+            }
         }
     </script>
 </body>
