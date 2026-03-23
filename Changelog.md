@@ -1,3 +1,6 @@
+## [2026-03-23] Update
+* Update index.html
+
 # 🛠️ CHANGELOG 🛠️
 
 # Monday March 23 2026;
