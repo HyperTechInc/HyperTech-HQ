@@ -3,126 +3,167 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>MIK | v22.0 OMNIPOTENT OVERLORD</title>
+    <title>MIK | EMPIRE CONTROL CENTER v22.0</title>
     <style>
         :root { 
-            --accent: #0a84ff; --bg: #000; --card: #0d0d0d; --text: #f2f2f7; 
+            --accent: #0a84ff; --bg: #000; --card: #0a0a0b; --text: #d1d1d6; 
             --green: #30d158; --danger: #ff453a; --border: #1c1c1e; 
-            --nuclear: #bf5af2; --gold: #ffd60a; --frost: #007aff;
+            --nuclear: #bf5af2; --gold: #ffd60a;
         }
-        * { box-sizing: border-box; font-family: 'SF Mono', 'Fira Code', monospace; }
+        * { box-sizing: border-box; font-family: 'Courier New', Courier, monospace; }
         body { background: var(--bg); color: var(--text); margin: 0; display: flex; height: 100vh; overflow: hidden; }
         
-        /* IMPERIAL SPIRE SIDEBAR */
+        /* IMPERIAL SIDEBAR */
         #sidebar { width: 320px; background: #000; border-right: 2px solid var(--accent); display: flex; flex-direction: column; padding: 15px; flex-shrink: 0; overflow-y: auto; }
-        .nav-item { padding: 12px; margin: 4px 0; border: 1px solid #1a1a1a; border-radius: 8px; color: #666; cursor: pointer; font-size: 11px; display: flex; align-items: center; transition: 0.2s; text-transform: uppercase; font-weight: 900; }
+        .sidebar-header { border-bottom: 1px solid var(--border); padding-bottom: 20px; margin-bottom: 15px; text-align: center; }
+        .nav-item { padding: 14px; margin: 4px 0; border: 1px solid #111; border-radius: 4px; color: #555; cursor: pointer; font-size: 11px; display: flex; align-items: center; transition: 0.2s; text-transform: uppercase; font-weight: bold; }
         .nav-item:hover { border-color: var(--accent); color: #fff; background: #0a84ff11; }
-        .nav-item.active { background: #0a84ff22; border-color: var(--accent); color: #fff; box-shadow: 0 0 15px #0a84ff33; }
+        .nav-item.active { background: #0a84ff22; border-color: var(--accent); color: #fff; box-shadow: 0 0 10px #0a84ff44; }
 
         /* MAIN COMMAND DECK */
         main { flex: 1; overflow-y: auto; padding: 25px; background: radial-gradient(circle at 50% 50%, #0d0d0d 0%, #000 100%); }
         .tab-view { display: none; }
-        .tab-view.active { display: block; animation: powerOn 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+        .tab-view.active { display: block; animation: powerOn 0.5s ease; }
         
-        .card { background: var(--card); border: 1px solid var(--border); padding: 20px; margin-bottom: 20px; border-radius: 12px; border-top: 3px solid var(--accent); box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-        .card-title { font-size: 12px; color: var(--accent); margin-bottom: 15px; font-weight: 900; letter-spacing: 2px; text-transform: uppercase; display: flex; justify-content: space-between; }
+        .card { background: var(--card); border: 1px solid var(--border); padding: 20px; margin-bottom: 20px; border-radius: 0; position: relative; border-left: 4px solid var(--accent); }
+        .card-title { font-size: 12px; color: var(--accent); margin-bottom: 15px; font-weight: 900; letter-spacing: 2px; text-transform: uppercase; display: flex; justify-content: space-between;}
 
-        /* COMM HUB (CHAT/CALL) */
-        .chat-box { height: 350px; background: #050505; border: 1px solid #222; border-radius: 8px; display: flex; flex-direction: column; }
-        #chat-window { flex: 1; padding: 15px; overflow-y: auto; font-size: 12px; }
-        .msg { margin-bottom: 10px; padding: 8px 12px; border-radius: 15px; max-width: 80%; }
-        .msg.bot { background: #1c1c1e; align-self: flex-start; border-bottom-left-radius: 2px; color: var(--accent); }
-        .msg.user { background: var(--accent); color: #fff; align-self: flex-end; border-bottom-right-radius: 2px; }
-        .chat-input-area { display: flex; padding: 10px; gap: 5px; border-top: 1px solid #222; }
+        /* COMM HUB UI */
+        .chat-box { height: 250px; background: #050505; border: 1px solid #222; display: flex; flex-direction: column; margin-top: 10px;}
+        #chat-window { flex: 1; padding: 10px; overflow-y: auto; font-size: 11px; color: var(--green); }
+        .chat-input-area { display: flex; border-top: 1px solid #222; }
+        .chat-input-area input { flex: 1; background: #000; border: none; color: #fff; padding: 10px; font-family: monospace; }
 
-        /* REDMI 15 LABS - CHEMISTRY VIZ */
-        .chem-viz { height: 150px; background: #000; border: 1px solid #333; position: relative; overflow: hidden; }
-        .particle { position: absolute; width: 4px; height: 4px; background: var(--gold); border-radius: 50%; animation: drift 3s infinite linear; }
+        /* REDMI 15 LABS VIZ */
+        .chem-lab { height: 100px; background: #000; border: 1px dashed var(--gold); position: relative; overflow: hidden; margin: 10px 0; }
+        .bubble { position: absolute; bottom: -20px; width: 10px; height: 10px; background: var(--gold); border-radius: 50%; animation: rise 2s infinite ease-in; opacity: 0.6; }
 
-        /* BUTTONS */
-        .btn-action { padding: 12px; background: #111; border: 1px solid var(--accent); color: #fff; font-size: 10px; font-weight: 900; cursor: pointer; text-transform: uppercase; flex: 1; }
-        .btn-action:hover { background: var(--accent); color: #000; }
-        .btn-nuke { background: #200; border-color: var(--danger); color: var(--danger); }
+        /* NATIONAL BUTTONS */
+        .hz-btn { padding: 12px; background: #111; border: 1px solid #333; color: #fff; cursor: pointer; font-weight: 900; font-size: 10px; text-transform: uppercase; }
+        .hz-btn:hover { background: var(--accent); }
+        .btn-nuke { background: #300; border-color: var(--danger); color: var(--danger); }
         .btn-nuke:hover { background: var(--danger); color: #000; }
 
-        @keyframes drift { from { transform: translateY(150px); opacity: 1; } to { transform: translateY(-10px); opacity: 0; } }
-        @keyframes powerOn { from { opacity: 0; transform: scale(0.98); } to { opacity: 1; transform: scale(1); } }
+        /* TERMINAL */
+        .term { background: #000; color: var(--green); padding: 10px; font-size: 10px; height: 120px; overflow-y: auto; border: 1px solid #222; margin-top: 10px; }
+
+        @keyframes rise { from { transform: translateY(0); } to { transform: translateY(-120px); opacity: 0; } }
+        @keyframes powerOn { from { opacity: 0; filter: brightness(2); } to { opacity: 1; filter: brightness(1); } }
     </style>
 </head>
 <body>
 
     <aside id="sidebar">
-        <div style="text-align:center; padding-bottom:20px; border-bottom:1px solid #1c1c1e; margin-bottom:15px;">
-            <div style="font-size: 18px; font-weight: 900; letter-spacing: 2px;">MIK_OS_v22</div>
-            <div style="font-size: 9px; color: var(--green);">● SYSTEM_STABLE_TSFU</div>
+        <div class="sidebar-header">
+            <div style="font-size: 10px; color: var(--gold);">BANJA LUKA SECTOR</div>
+            <div style="font-size: 20px; font-weight: 900; color: #fff; letter-spacing: 3px;">KINGZAREK1</div>
+            <div style="font-size: 8px; color: var(--green);">UPLINK: bosanskasirnica001@gmail.com</div>
         </div>
 
-        <nav>
-            <div class="nav-item active" onclick="tab('dash', this)">🛰️ OVERLORD_DECK</div>
+        <nav id="master-nav">
+            <div class="nav-item active" onclick="tab('core', this)">📡 NATION_DASHBOARD</div>
             <div class="nav-item" onclick="tab('comm', this)">📱 IMPERIAL_COMM</div>
-            <div class="nav-item" onclick="tab('labs', this)">🧪 REDMI_15_LABS</div>
+            <div class="nav-item" onclick="tab('hz', this)">⚡ REFRESH_CONTROL</div>
+            <div class="nav-item" onclick="tab('live', this)">📹 TACTICAL_LIVE</div>
             <div class="nav-item" onclick="tab('mod', this)">⚖️ MOD_ARSENAL</div>
-            <div class="nav-item" onclick="tab('nuke', this)">☢️ NUCLEAR_SETTINGS</div>
+            <div class="nav-item" onclick="tab('hardware', this)">🧪 REDMI_15_LABS</div>
+            <div class="nav-item" onclick="tab('hatred', this)">💀 HATRED_LOGS</div>
+            <div class="nav-item" onclick="tab('settings', this)">☢️ NUCLEAR_SETTINGS</div>
         </nav>
 
-        <div style="margin-top:auto; font-size:10px; background:#050505; padding:15px; border-radius:8px; border:1px solid #111;">
-            OWNER: KINGZAREK1<br>
-            BNS_UPLINK: ACTIVE<br>
-            LATENCY: 0.018ms
+        <div style="margin-top:auto; padding:10px; background:#050505; border:1px solid #111; font-size:9px;">
+            DEVICE: REDMI 15 4G<br>
+            OS: HYPEROS 3 (A16)<br>
+            STATUS: 🟩 TSFU ACTIVE
         </div>
     </aside>
 
     <main>
-        <div id="view-dash" class="tab-view active">
+        <div id="view-core" class="tab-view active">
             <div class="card">
-                <div class="card-title">STATUS_OVERVIEW <span style="color:var(--green)">🟩 25°C</span></div>
-                <p style="font-size:11px;">National Status: <span style="color:var(--gold)">MIK_IMMORTALITY_ENGAGED</span></p>
-                <div style="display:flex; gap:10px;">
-                    <div class="btn-action">SYNC_144HZ</div>
-                    <div class="btn-action">REBOOT_MISO</div>
+                <div class="card-title">EMPIRE_RESOURCES</div>
+                <div style="font-size:11px;">
+                    > SIZPSA Stability: <span style="color:var(--green)">🟩 NOMINAL</span><br>
+                    > ISP Asteroid Shield: <span style="color:var(--green)">🟩 100%</span><br>
+                    > BotZarek Squad: <span style="color:var(--accent)">10 BOTS STANDING BY</span>
                 </div>
             </div>
         </div>
 
         <div id="view-comm" class="tab-view">
             <div class="card">
-                <div class="card-title">COMM_CENTER [CHAT/CALL]</div>
-                <div class="chat-box">
-                    <div id="chat-window">
-                        <div class="msg bot">Welcome, My King. bosanskasirnica001@gmail.com is linked. Awaiting commands.</div>
-                    </div>
-                    <div class="chat-input-area">
-                        <input type="text" id="chat-in" style="flex:1; background:#000; border:1px solid #333; color:white; padding:5px;" placeholder="Message Spire...">
-                        <button class="btn-action" style="flex:0; padding:5px 15px;" onclick="sendMsg()">CHAT</button>
-                        <button class="btn-action" style="flex:0; padding:5px 15px; border-color:var(--green); color:var(--green);" onclick="triggerCall()">CALL</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div id="view-labs" class="tab-view">
-            <div class="card" style="border-top-color: var(--gold);">
-                <div class="card-title">🧪 REDMI_15_CHEMICAL_LABS</div>
-                <div class="chem-viz" id="chem-box">
-                    </div>
-                <div style="margin-top:15px; font-size:11px;">
-                    <strong>BATTERY_INJECTION:</strong> Si-C-Graphene-Saltion<br>
-                    <strong>CHARGE_SPEED:</strong> 250W Super-Dart<br>
-                    <strong>SIZPSA_VAL:</strong> 0.018ms Switching
-                </div>
-                <button class="btn-action" style="margin-top:10px; width:100%;" onclick="startInjection()">INJECT_SALTION_CORE</button>
-            </div>
-        </div>
-
-        <div id="view-nuke" class="tab-view">
-            <div class="card" style="border-top-color: var(--danger);">
-                <div class="card-title" style="color:var(--danger);">☢️ NUCLEAR_PROTOCOLS [ŉ]</div>
-                <p style="font-size:10px; color:#666;">WARNING: Actions here are irreversible. Sector-wide purge only.</p>
+                <div class="card-title">IMPERIAL_COMM_HUB [MIK_SYNC]</div>
                 <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
-                    <button class="btn-action btn-nuke" onclick="nukeWipe()">ŉ CATASTROPHIC_WIPE</button>
-                    <button class="btn-action" style="border-color:var(--frost); color:var(--frost);" onclick="vpnSync()">AUTO_VPN_RECONNECT</button>
+                    <button class="hz-btn" style="border-color:var(--green); color:var(--green);" onclick="triggerCall()">📞 CALL COUNCIL</button>
+                    <button class="hz-btn" onclick="alert('VOICEMAIL: bosanskasirnica001@gmail.com is secure.')">📟 VOICEMAIL</button>
                 </div>
-                <div class="btn-action" style="margin-top:10px; text-align:center;" onclick="modelSwitch()">[MODEL SWITCH] -> GREEN</div>
+                <div class="chat-box">
+                    <div id="chat-window">> Welcome, King. The Spire is listening.</div>
+                    <div class="chat-input-area">
+                        <input type="text" id="chat-msg" placeholder="Send Imperial Decree...">
+                        <button class="hz-btn" style="border:none; background:var(--accent);" onclick="sendImperialChat()">SEND</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="view-hz" class="tab-view">
+            <div class="card">
+                <div class="card-title">HZ_ZONE_INJECTOR (MRRAO)</div>
+                <div class="hz-control" style="display:flex; gap:5px;">
+                    <button class="hz-btn" style="flex:1;" onclick="setHz(1, this)">1 Hz</button>
+                    <button class="hz-btn" style="flex:1;" onclick="setHz(144, this)">144 Hz</button>
+                </div>
+                <div class="term" id="hz-term">> SYNCING LCD IPS PANEL...</div>
+            </div>
+        </div>
+
+        <div id="view-hardware" class="tab-view">
+            <div class="card" style="border-left-color: var(--gold);">
+                <div class="card-title" style="color:var(--gold);">🧪 REDMI_15_CHEMICAL_LABS</div>
+                <div class="chem-lab" id="lab-viz"></div>
+                <div style="font-size:10px; margin-bottom:10px;">
+                    CORE: Si-C-Graphene-Saltion<br>
+                    STATUS: UNSTABLE_HIGH_CAPACITY
+                </div>
+                <button class="hz-btn" style="width:100%;" onclick="injectSaltion()">INJECT_SALTION_CORE</button>
+                <div class="term" id="lab-term">> AWAITING CHEMICAL INPUT...</div>
+            </div>
+        </div>
+
+        <div id="view-settings" class="tab-view">
+            <div class="card" style="border-left-color: var(--danger);">
+                <div class="card-title" style="color:var(--danger);">☢️ NUCLEAR_PROTOCOLS [ŉ]</div>
+                <button class="hz-btn btn-nuke" style="width:100%; margin-bottom:10px;" onclick="nukeWipe()">ŉ CATASTROPHIC_WIPE</button>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+                    <button class="hz-btn" onclick="alert('[MODEL SWITCH] -> GREEN MODE')">SWITCH_MODEL</button>
+                    <button class="hz-btn" onclick="alert('VPN TUNNEL: RECONNECTED')">VPN_AUTO_CONNECT</button>
+                </div>
+                <div class="term" style="color:var(--danger);">> WARNING: Sector Wipe is irreversible.</div>
+            </div>
+        </div>
+
+        <div id="view-live" class="tab-view">
+             <div class="card">
+                <div class="card-title">TACTICAL_LIVE</div>
+                <button class="hz-btn" onclick="startTactical()">INITIATE DRONE</button>
+                <video id="v-feed" autoplay style="width:100%; margin-top:10px;"></video>
+             </div>
+        </div>
+
+        <div id="view-mod" class="tab-view">
+            <div class="card">
+                <div class="card-title">MOD_ARSENAL</div>
+                <input type="text" id="target" placeholder="TARGET" style="width:100%; background:#000; border:1px solid #333; color:white; padding:10px; margin-bottom:10px;">
+                <button class="hz-btn" style="background:var(--danger);" onclick="mod('PURGE')">EXECUTE PURGE</button>
+                <div class="term" id="mod-term"></div>
+            </div>
+        </div>
+
+        <div id="view-hatred" class="tab-view">
+            <div class="card" style="border-left-color:red;">
+                <div class="card-title" style="color:red;">HATRED_LOGS</div>
+                <div class="term" style="color:red; height:200px;">[!] SHED_DETECTED... [!] BOSS_MODE_ACTIVE...</div>
             </div>
         </div>
     </main>
@@ -135,48 +176,60 @@
             el.classList.add('active');
         }
 
-        function sendMsg() {
-            const i = document.getElementById('chat-in');
-            if(!i.value) return;
-            const w = document.getElementById('chat-window');
-            w.innerHTML += `<div class="msg user">${i.value}</div>`;
-            setTimeout(() => {
-                w.innerHTML += `<div class="msg bot">Affirmative, My King. Executing command: ${i.value}</div>`;
-                w.scrollTop = w.scrollHeight;
-            }, 600);
-            i.value = "";
-        }
-
         function triggerCall() {
-            alert("⚠️ IMPERIAL UPLINK: CALLING MIK COUNCIL...");
+            alert("⚠️ MIK_ENCRYPTION: CALLING THE COUNCIL...");
         }
 
-        function startInjection() {
-            const box = document.getElementById('chem-box');
-            box.innerHTML = "";
-            for(let i=0; i<30; i++) {
-                let p = document.createElement('div');
-                p.className = 'particle';
-                p.style.left = Math.random() * 100 + "%";
-                p.style.animationDelay = Math.random() * 2 + "s";
-                box.appendChild(p);
+        function sendImperialChat() {
+            const input = document.getElementById('chat-msg');
+            const win = document.getElementById('chat-window');
+            if(!input.value) return;
+            win.innerHTML += `<br><span style="color:#fff;">KING:</span> ${input.value}`;
+            setTimeout(() => {
+                win.innerHTML += `<br><span style="color:var(--accent);">SPIRE:</span> Command Acknowledged.`;
+                win.scrollTop = win.scrollHeight;
+            }, 500);
+            input.value = "";
+        }
+
+        function injectSaltion() {
+            const viz = document.getElementById('lab-viz');
+            const term = document.getElementById('lab-term');
+            viz.innerHTML = "";
+            for(let i=0; i<15; i++) {
+                let b = document.createElement('div');
+                b.className = 'bubble';
+                b.style.left = Math.random() * 100 + "%";
+                b.style.animationDelay = Math.random() * 2 + "s";
+                viz.appendChild(b);
             }
-            alert("🧪 SALTION CORE INJECTED. BATTERY CAPACITY: ♾️");
+            term.innerHTML += "<br>> CHEMICAL_INJECTION: Si-C-Graphene-Saltion SUCCESS.";
+            term.scrollTop = term.scrollHeight;
         }
 
         function nukeWipe() {
-            if(confirm("INITIATE ŉ NUCLEAR WIPE? THIS PURGES ALL CACHE.")) {
-                document.body.style.background = "red";
+            if(confirm("INITIATE ŉ NUCLEAR WIPE? bosanskasirnica001 will be purged.")) {
+                document.body.style.filter = "invert(1) hue-rotate(90deg)";
                 setTimeout(() => location.reload(), 1000);
             }
         }
 
-        function modelSwitch() {
-            alert("MODEL_SWITCH: [SUCCESS] - CONNECTED TO GREEN_MOD_FREE");
+        function setHz(val, el) {
+            const term = document.getElementById('hz-term');
+            term.innerHTML += `<br>> REFRESH_RATE: ${val}Hz.`;
+            term.scrollTop = term.scrollHeight;
+        }
+        
+        async function startTactical() {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+                document.getElementById('v-feed').srcObject = stream;
+            } catch(e) { alert("ERROR: Camera Access Denied."); }
         }
 
-        function vpnSync() {
-            alert("VPN_PROTOCOL: CONNECTING TO NEW TUNNEL...");
+        function mod(act) {
+            const t = document.getElementById('target').value || "UNKNOWN";
+            document.getElementById('mod-term').innerHTML += `<br>> ${act}: ${t}`;
         }
     </script>
 </body>
