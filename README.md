@@ -4,9 +4,13 @@
 
 State: 🌐 Public 🌐
 
+# ⚠️ WARNING ⚠️
+
 ⚠️ Release not stable ⚠️
 
 ⚠️ Use at your own risk ⚠️
+
+⚠️ MADE WITH AI AND MYSELF ⚠️
 
 # 🖇️ Other Things 🖇️
 
@@ -17,8 +21,6 @@ check deezz thingies out
 # ⚡Other Projects⚡:  
 
 https://github.com/HyperTechInc/HyperTech-HQ/blob/main/Other%20Projects.md
-
-# ⚠️MADE WITH AI AND MYSELF⚠️
 
 # 💎USED GEMINI AI ONLY💎
 https://gemini.google.com
