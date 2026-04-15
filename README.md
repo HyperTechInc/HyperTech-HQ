@@ -12,5 +12,4 @@ State: 🌐 Public 🌐
 
 check deezz thingies out
 
-
- https://github.com/HyperTechInc/HyperTech-HQ/blob/main/Sponsors.md
+ Sponsors: https://github.com/HyperTechInc/HyperTech-HQ/blob/main/Sponsors.md
