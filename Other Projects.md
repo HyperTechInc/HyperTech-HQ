@@ -1,1 +1,1 @@
-Check out my other projects:
+# ⚡ Check out my other projects ⚡:
