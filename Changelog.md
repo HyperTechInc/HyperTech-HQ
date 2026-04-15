@@ -1,3 +1,6 @@
+## [2026-04-15] Update
+* Create SECURITY.md
+
 ## [2026-03-23] Update
 * Update index.html
 
