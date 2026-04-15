@@ -1,4 +1,7 @@
 ## [2026-04-15] Update
+* Create SECURITY.md
+
+## [2026-04-15] Update
 * Delete SECURITY.md
 
 ## [2026-04-15] Update
