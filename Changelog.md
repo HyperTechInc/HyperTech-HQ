@@ -1,4 +1,7 @@
 ## [2026-04-15] Update
+* Update Other Projects.md
+
+## [2026-04-15] Update
 * Create Other Projects.md
 
 ## [2026-04-15] Update
