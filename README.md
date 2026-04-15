@@ -14,7 +14,9 @@ check deezz thingies out
 
  Sponsors: https://github.com/HyperTechInc/HyperTech-HQ/blob/main/Sponsors.md
 
-# ⚡Other Projects⚡: https://github.com/HyperTechInc/HyperTech-HQ/blob/main/Other%20Projects.md
+# ⚡Other Projects⚡:  
+
+https://github.com/HyperTechInc/HyperTech-HQ/blob/main/Other%20Projects.md
 
 # ⚠️MADE WITH AI AND MYSELF⚠️
 
