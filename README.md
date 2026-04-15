@@ -8,4 +8,9 @@ State: 🌐 Public 🌐
 
 ⚠️ Use at your own risk ⚠️
 
-Check out: https://github.com/HyperTechInc/HyperTech-HQ/blob/main/Sponsors.md
+# 🖇️ Other Things 🖇️
+
+check deezz thingies out
+
+
+ https://github.com/HyperTechInc/HyperTech-HQ/blob/main/Sponsors.md
