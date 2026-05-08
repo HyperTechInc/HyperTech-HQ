@@ -24,6 +24,10 @@ check deezz thingies out
 
 https://github.com/HyperTechInc/HyperTech-HQ/blob/main/Other%20Projects.md
 
+### 🔗 HTTPS Certificate 📄
+
+https://github.com/HyperTechInc/HyperTech-HQ/CERTIFICATE.crt
+
 ### 💎USED GEMINI AI ONLY💎
 https://gemini.google.com
 
