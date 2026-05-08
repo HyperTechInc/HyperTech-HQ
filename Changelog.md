@@ -1,4 +1,7 @@
 ## [2026-05-08] Update
+* Move index.html to root folder
+
+## [2026-05-08] Update
 * Create CNAME
 
 ## [2026-05-08] Update
