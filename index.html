@@ -2,263 +2,85 @@
 <html lang="bs">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HyperTech-HQ | MIK Empire</title>
-    <style>
-        :root { --accent: #00ffcc; --gold: #ffd700; --bg: #050505; --surface: #111; --danger: #ff4444; }
-        body { background: var(--bg); color: #e0e0e0; font-family: 'Courier New', monospace; margin: 0; }
-        
-        /* AUTHENTICATION OVERLAY */
-        #auth-gate { position: fixed; inset: 0; background: black; z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; border: 4px solid var(--accent); }
-        .box { background: var(--surface); padding: 30px; border-radius: 10px; border: 1px solid var(--gold); text-align: center; }
-        input, select { background: #000; border: 1px solid var(--accent); color: var(--accent); padding: 12px; margin: 5px; width: 280px; }
-        
-        /* MAIN INTERFACE */
-        #main-deck { display: none; height: 100vh; flex-direction: column; }
-        header { background: var(--surface); border-bottom: 2px solid var(--accent); padding: 10px 20px; display: flex; justify-content: space-between; align-items: center; }
-        
-        /* NAVIGATION */
-        .nav-bar { display: flex; background: #000; padding: 5px; gap: 5px; overflow-x: auto; }
-        .nav-bar button { background: var(--surface); color: white; border: 1px solid #333; padding: 8px 15px; cursor: pointer; font-size: 11px; }
-        .nav-bar button.active { border-color: var(--gold); color: var(--gold); }
-
-        /* VIEWPORTS */
-        .view { display: none; padding: 20px; flex-grow: 1; overflow-y: auto; }
-        .view.active { display: block; }
-        
-        /* SOCIAL FEED & CHAT */
-        #social-feed, #ai-window { background: #000; border: 1px solid #222; height: 300px; overflow-y: auto; padding: 10px; margin-bottom: 10px; }
-        .post { border-left: 3px solid var(--accent); padding: 10px; background: #0a0a0a; margin-bottom: 10px; }
-        
-        /* CAMERA */
-        video { width: 100%; max-width: 400px; border: 2px solid var(--gold); border-radius: 10px; }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>HyperTech-HQ | KingZarek1</title>
+    
+    <link rel="stylesheet" href="HTMLcss.css">
+    
+    <script type="module" src="HTMLjavaScript.js"></script>
 </head>
 <body>
 
     <div id="auth-gate">
-        <div class="box">
-            <h2 style="color:var(--gold);">[ HYPERTECH_HQ_v3 ]</h2>
-            <p>AUTHORIZED EMAILS ONLY</p>
-            <input type="email" id="user-email" placeholder="Email Address">
-            <input type="password" id="passkey" placeholder="Passkey (25062RN2DY)">
+        <h1 style="color:var(--gold); margin-bottom: 5px;">HYPERTECH AUTHENTICATION</h1>
+        <p style="font-size: 12px; color: #888;">RECOGNIZING DEVICE: 25062RN2DY</p>
+        
+        <div style="margin: 20px 0;">
+            <input type="email" id="user-email" placeholder="ADMIN_EMAIL" autocomplete="off">
             <br>
-            <button onclick="verifyAccess()" style="width:100%; padding:15px; margin-top:10px; background:var(--accent); font-weight:bold;">VERIFY BIOMETRICS & LOGIN</button>
-            <p id="gate-msg" style="font-size:10px;"></p>
+            <input type="password" id="passkey" placeholder="PASSKEY">
         </div>
+        
+        <button onclick="verifyAccess()">VERIFY BIOMETRICS</button>
+        <p id="gate-msg" style="margin-top: 15px; font-size: 11px; font-weight: bold;"></p>
     </div>
 
     <div id="main-deck">
         <header>
-            <div>BOSS: <span id="display-name" style="color:var(--accent);">KingZarek1</span></div>
-            <div id="status-light" style="color:var(--accent);">GEN_AI: ONLINE</div>
+            <div class="logo">
+                <span style="color:var(--accent);">⚡</span> HYPERTECH-HQ 
+                <span id="display-name" style="color:var(--gold); margin-left:10px;"></span>
+            </div>
+            <div id="status-light" style="font-size: 10px;">SYSTEM: <span style="color:var(--accent);">ONLINE</span></div>
         </header>
 
-        <div class="nav-bar">
-            <button onclick="switchTab('dash')" id="btn-dash">DASHBOARD</button>
-            <button onclick="switchTab('social')" id="btn-social">SOCIAL/BLOG</button>
-            <button onclick="switchTab('ai')" id="btn-ai">SPIRE AI</button>
-            <button onclick="switchTab('wa')" id="btn-wa">WHATSAPP</button>
-            <button onclick="switchTab('cam')" id="btn-cam">SENSORS/CAM</button>
-            <button onclick="nuke()" style="color:var(--danger);">ŉ NUKE</button>
-        </div>
+        <nav class="nav-bar">
+            <button id="btn-dash" class="active" onclick="switchTab('dash')">DASHBOARD</button>
+            <button id="btn-social" onclick="switchTab('social')">BLOGS</button>
+            <button id="btn-ai" onclick="switchTab('ai')">SPIRE AI</button>
+            <button id="btn-cam" onclick="switchTab('cam')">SENSORS</button>
+            <button class="nuke" onclick="nuke()">ŉ NUKE</button>
+        </nav>
 
-        <div id="tab-dash" class="view active">
-            <h3>SYSTEM STATUS</h3>
-            <div class="post">DEVICE: Redmi 15 4G [MIK Son]</div>
-            <div class="post">OS: HyperOS 3 / Android 16</div>
-            <div class="post">KEY STATUS: <span id="key-index">Key [0] Active</span></div>
-        </div>
+        <main id="tab-dash" class="view active">
+            <h3 style="color:var(--accent);">EMPIRE STATUS</h3>
+            <div class="post"><b>HARDWARE:</b> Redmi 15 4G [Creek]</div>
+            <div class="post"><b>DISPLAY:</b> LCD IPS 144Hz (MRRAO Active)</div>
+            <div class="post"><b>LOCATION:</b> Banja Luka Hub</div>
+            <div class="post"><b>AI_KEY:</b> <span id="key-index" style="color:var(--gold);">Ready [0]</span></div>
+        </main>
 
-        <div id="tab-social" class="view">
-            <h3>SOCIAL FEED</h3>
-            <div id="social-feed"></div>
-            <input type="text" id="post-title" placeholder="Title" style="width:90%;">
-            <textarea id="post-text" placeholder="What's happening in Banja Luka?" style="width:90%; height:60px; background:#000; color:white; border:1px solid var(--accent);"></textarea>
-            <button onclick="addPost()" style="background:var(--gold); color:black; padding:10px;">PUBLISH BLOG</button>
-        </div>
+        <section id="tab-social" class="view">
+            <h3 style="color:var(--accent);">MIK FEED</h3>
+            <div id="social-feed">
+                </div>
+            <div style="display:flex; flex-direction:column; gap:5px;">
+                <input type="text" id="post-title" placeholder="Blog Title">
+                <textarea id="post-text" rows="3" placeholder="What is the Boss thinking?"></textarea>
+                <button onclick="addPost()">PUBLISH TO EMPIRE</button>
+            </div>
+        </section>
 
-        <div id="tab-ai" class="view">
-            <h3>SPIRE AI (LOYAL_LIEUTENANT)</h3>
-            <div id="ai-window"></div>
-            <input type="text" id="ai-msg" placeholder="Speak to the Spire..." onkeypress="if(event.key==='Enter') runSpire()">
-            <button onclick="runSpire()">SEND</button>
-        </div>
+        <section id="tab-ai" class="view">
+            <h3 style="color:var(--accent);">SPIRE AI ADVISOR</h3>
+            <div id="ai-window">
+                <div style="color:#555;">> Awaiting King's command...</div>
+            </div>
+            <div style="display:flex; gap:5px;">
+                <input type="text" id="ai-msg" placeholder="Talk to Spire..." style="flex-grow:1;">
+                <button onclick="runSpire()">SEND</button>
+            </div>
+        </section>
 
-        <div id="tab-wa" class="view">
-            <h3>WHATSAPP BRIDGE</h3>
-            <div class="post">Status: Link your account to authorize HQ commands.</div>
-            <button onclick="window.open('https://web.whatsapp.com')">OPEN WHATSAPP WEB</button>
-        </div>
-
-        <div id="tab-cam" class="view">
-            <h3>SENSORS & LIVESTREAM</h3>
-            <video id="vid" autoplay playsinline></video>
-            <br>
-            <button onclick="initCam()">START STREAM</button>
-            <button onclick="rotate()">ROTATE 180°</button>
-        </div>
+        <section id="tab-cam" class="view">
+            <h3 style="color:var(--accent);">BOSS_CAM LIVE</h3>
+            <video id="vid" autoplay playsinline muted></video>
+            <div style="display:flex; justify-content:center; gap:10px; margin-top:10px;">
+                <button onclick="initCam()">START STREAM</button>
+                <button onclick="rotate()">ROTATE 180°</button>
+            </div>
+        </section>
     </div>
 
-    <script type="module">
-        import { GoogleGenerativeAI } from "https://esm.run/@google/generative-ai";
-
-        // CONFIG & AUTH
-        const KEYS = [
-            "AIzaSyBM6tbZp_ZYxnkGtkU38y7mWqyD3P7outE",
-            "AIzaSyDtdMYRFlXDoywgiaK_AGJtn-CwUfZCVbY",
-            "AIzaSyD6O33X228ChlTnSFgxwGPYYikmw94WDao",
-            "AIzaSyAL-MrrUPXRWFBQl9M5-ndG44aksj43TUs",
-            "AIzaSyDV6uKjxmMd50ic17t-b8g0FElymIQoSqY"
-        ];
-        let kIdx = 0;
-
-        const AUTH_EMAILS = [
-            "bosanskasirnica001@gmail.com", "pepica104@outlook.com", "bosanskiburek001@gmail.com",
-            "kingzarek4456@gmail.com", "pepica104@gmail.com", "pepica105@outlook.com",
-            "peterrabbit4456@gmail.com", "real.hypertech.inc@gmail.com"
-        ];
-
-        // 1. AUTHENTICATION LOGIC (Actual Verification)
-        window.verifyAccess = () => {
-            const email = document.getElementById('user-email').value.toLowerCase();
-            const pass = document.getElementById('passkey').value;
-            const msg = document.getElementById('gate-msg');
-
-            msg.innerText = "VERIFYING BIOMETRICS...";
-            
-            setTimeout(() => {
-                if (AUTH_EMAILS.includes(email) && pass === "25062RN2DY") {
-                    document.getElementById('auth-gate').style.display = 'none';
-                    document.getElementById('main-deck').style.display = 'flex';
-                    document.getElementById('display-name').innerText = email.split('@')[0];
-                    loadSocial();
-                } else {
-                    msg.innerText = "ACCESS DENIED: UNAUTHORIZED ENTITY.";
-                    msg.style.color = "red";
-                }
-            }, 1000);
-        };
-
-        // 2. SPIRE AI WITH KEY ROTATION & MODERATION
-        window.runSpire = async () => {
-            const input = document.getElementById('ai-msg');
-            const win = document.getElementById('ai-window');
-            if (!input.value) return;
-
-            const prompt = input.value;
-            win.innerHTML += `<div><b>KING:</b> ${prompt}</div>`;
-            input.value = "Uplinking...";
-
-            try {
-                const genAI = new GoogleGenerativeAI(KEYS[kIdx]);
-                const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
-                
-                const result = await model.generateContent(`You are the Spire AI for KingZarek1. Be witty, loyal to the MIK Empire. Check for NSFW/18+ content. Respond: ${prompt}`);
-                const response = await result.response;
-                const text = response.text();
-
-                if (text.match(/18\+|NSFW|porn|explicit/i)) {
-                    win.innerHTML += `<div style="color:red;">[MODERATION] 18+ CONTENT DETECTED. BLOCKED.</div>`;
-                } else {
-                    win.innerHTML += `<div style="color:var(--accent);"><b>SPIRE:</b> ${text}</div>`;
-                }
-            } catch (e) {
-                kIdx = (kIdx + 1) % KEYS.length; // ROTATION LOGIC
-                document.getElementById('key-index').innerText = `Key [${kIdx}] Active (Self-Healed)`;
-                window.runSpire(); // RECURSIVE CALL
-            }
-            input.value = "";
-            win.scrollTop = win.scrollHeight;
-        };
-
-        // 3. SOCIAL BLOG SYSTEM (Persistent)
-        window.addPost = () => {
-            const title = document.getElementById('post-title').value;
-            const text = document.getElementById('post-text').value;
-            if (!title || !text) return;
-
-            const posts = JSON.parse(localStorage.getItem('hp_posts') || '[]');
-            posts.unshift({ title, text, user: document.getElementById('display-name').innerText, time: new Date().toLocaleString() });
-            localStorage.setItem('hp_posts', JSON.stringify(posts));
-            loadSocial();
-        };
-
-        window.loadSocial = () => {
-            const feed = document.getElementById('social-feed');
-            const posts = JSON.parse(localStorage.getItem('hp_posts') || '[]');
-            feed.innerHTML = posts.map(p => `
-                <div class="post">
-                    <b style="color:var(--gold)">${p.user}</b> <small>${p.time}</small><br>
-                    <u>${p.title}</u><br>${p.text}
-                </div>
-            `).join('');
-        };
-
-        // 4. CAMERA & ROTATION
-        let rot = 0;
-        window.initCam = async () => {
-            const v = document.getElementById('vid');
-            const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-            v.srcObject = stream;
-        };
-        window.rotate = () => {
-            rot += 180;
-            document.getElementById('vid').style.transform = `rotate(${rot}deg)`;
-        };
-
-        // 5. UTILS
-        window.switchTab = (id) => {
-            document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-            document.querySelectorAll('.nav-bar button').forEach(b => b.classList.remove('active'));
-            document.getElementById('tab-' + id).classList.add('active');
-            document.getElementById('btn-' + id).classList.add('active');
-        };
-
-        window.nuke = () => { if(confirm("ŉ NUCLEAR WIPE?")) { localStorage.clear(); location.reload(); } };
-    </script>
-</body>
-</html>                }
-            } catch (err) {
-                console.log("KEY FAILED. ROTATING...");
-                currentKeyIndex = (currentKeyIndex + 1) % EMPIRE_KEYS.length;
-                win.innerHTML += `<div style="color:gray;">[SYSTEM] Key failure. Self-healing active. Switched to key ${currentKeyIndex}.</div>`;
-                window.runAI(); // Auto-retry with new key
-            }
-            input.value = "";
-            win.scrollTop = win.scrollHeight;
-        };
-
-        // CAMERA SYSTEM
-        let rotation = 0;
-        window.startCam = async () => {
-            const video = document.getElementById('webcam');
-            try {
-                const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-                video.srcObject = stream;
-            } catch (e) { alert("Camera Uplink Failed."); }
-        };
-
-        window.rotateCam = () => {
-            rotation += 180;
-            document.getElementById('webcam').style.transform = `rotate(${rotation}deg)`;
-        };
-
-        // TAB NAVIGATION
-        window.view = (id) => {
-            document.querySelectorAll('.viewport').forEach(v => v.classList.remove('active'));
-            document.getElementById('view-' + id).classList.add('active');
-        };
-
-        window.initSystem = () => {
-            console.log("HyperTech-HQ Operational.");
-            if(EMPIRE_KEYS[0].includes("TEST_BOT")) {
-                document.getElementById('model-tag').innerText = "[TEST_BOT ACTIVE]";
-            }
-        };
-
-        window.nuke = () => { if(confirm("ŉ NUCLEAR WIPE?")) location.reload(); };
-    </script>
 </body>
 </html>
-
