@@ -4,7 +4,7 @@
 
 State: 🌐 Public 🌐
 
-# ⚠️ WARNING ⚠️
+### ⚠️ WARNING ⚠️
 
 ⚠️ Release not stable ⚠️
 
@@ -12,15 +12,22 @@ State: 🌐 Public 🌐
 
 ⚠️ MADE WITH AI AND MYSELF ⚠️
 
-# 🖇️ Other Things 🖇️
+⚠️ The link may give 404. Please wait untill it's done ⚠️
+
+### 🖇️ Other Things 🖇️
 
 check deezz thingies out
 
  Sponsors: https://github.com/HyperTechInc/HyperTech-HQ/blob/main/Sponsors.md
 
-# ⚡Other Projects⚡:  
+### ⚡Other Projects⚡:  
 
 https://github.com/HyperTechInc/HyperTech-HQ/blob/main/Other%20Projects.md
 
-# 💎USED GEMINI AI ONLY💎
+### 💎USED GEMINI AI ONLY💎
 https://gemini.google.com
+
+# 🔗 New Website Address 🔗
+### 🔗 new link for this 🔗
+
+***https://headquarters.hypertech.qzz.io***
