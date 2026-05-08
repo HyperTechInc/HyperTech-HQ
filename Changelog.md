@@ -1,4 +1,7 @@
 ## [2026-05-08] Update
+* Add authentication and runSpire function
+
+## [2026-05-08] Update
 * Update title and styles in index.html
 
 ## [2026-05-08] Update
