@@ -1,4 +1,7 @@
 ## [2026-05-08] Update
+* Refactor index.html with updates and new structure
+
+## [2026-05-08] Update
 * Create HTMLcss.css
 
 ## [2026-05-08] Update
