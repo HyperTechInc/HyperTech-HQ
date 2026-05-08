@@ -1,4 +1,7 @@
 ## [2026-05-08] Update
+* Update HTTPS certificate link in README
+
+## [2026-05-08] Update
 * Add HTTPS Certificate section to README
 
 ## [2026-05-08] Update
